@@ -2,22 +2,6 @@ import { Notice, Platform, PluginSettingTab, Setting } from "obsidian";
 import type TodoBoardPlugin from "../main";
 import { signIn } from "./google";
 
-/** Where the Python cal-sync this replaces kept its sign-in (desktop only). */
-function readCalSync(): { clientId: string; clientSecret: string; refreshToken: string; calendarId: string | null } | null {
-  try {
-    const fs = (window as any).require("fs");
-    const dir = `${(window as any).require("os").homedir()}/.config/todocal`;
-    const token = JSON.parse(fs.readFileSync(`${dir}/token.json`, "utf8"));
-    let calendarId = null;
-    try {
-      calendarId = JSON.parse(fs.readFileSync(`${dir}/state.json`, "utf8")).calendar_id ?? null;
-    } catch {}
-    return { clientId: token.client_id, clientSecret: token.client_secret, refreshToken: token.refresh_token, calendarId };
-  } catch {
-    return null;
-  }
-}
-
 export class SettingsTab extends PluginSettingTab {
   plugin: TodoBoardPlugin;
 
@@ -62,15 +46,6 @@ export class SettingsTab extends PluginSettingTab {
         signedIn ? "Signed in." : Platform.isDesktopApp ? "Not signed in." : "Not signed in. Sign in on your computer and it reaches this device through Sync.",
       );
     if (Platform.isDesktopApp) {
-      const calSync = readCalSync();
-      if (calSync && calSync.refreshToken !== s.refreshToken)
-        account.addButton((b) =>
-          b.setButtonText("Use cal-sync's sign-in").onClick(async () => {
-            Object.assign(s, calSync);
-            await save();
-            this.display();
-          }),
-        );
       account.addButton((b) =>
         b.setButtonText(signedIn ? "Sign in again" : "Sign in").onClick(async () => {
           if (!s.clientId || !s.clientSecret) return fail("Fill in the OAuth client ID and secret first.");
