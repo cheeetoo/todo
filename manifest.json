@@ -1,0 +1,9 @@
+{
+  "id": "todo-board",
+  "name": "TODO Board",
+  "version": "0.1.0",
+  "minAppVersion": "1.5.0",
+  "description": "Our own kanban board for markdown files, file-compatible with the Kanban plugin.",
+  "author": "Finn",
+  "isDesktopOnly": false
+}

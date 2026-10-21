@@ -1,0 +1,20 @@
+{
+  "name": "todo-board",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Our own markdown-backed kanban board for Obsidian, file-compatible with obsidian-kanban.",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.mjs",
+    "dev": "node esbuild.config.mjs --watch",
+    "test": "node --import ./test/stub/register.mjs --test test/",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "esbuild": "^0.28.2",
+    "happy-dom": "^21.0.4",
+    "obsidian": "^1.14.4",
+    "typescript": "^7.0.2"
+  }
+}
