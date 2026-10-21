@@ -1,5 +1,5 @@
 // Reads and writes the obsidian-kanban markdown format, byte for byte, so the
-// same TODO.md works with that plugin, with this one, and with cal-sync.
+// same TODO.md still opens in that plugin.
 //
 //   ---\n\nkanban-plugin: board\n\n---\n\n      frontmatter (kept verbatim)
 //   ## Lane\n\n**Complete**\n- [ ] card\n\n\n    one block per lane
@@ -28,10 +28,10 @@ export interface TagColor {
   backgroundColor?: string;
 }
 
+/** obsidian-kanban's per-board settings; the ones this plugin uses are typed. */
 export interface BoardSettings {
   "tag-colors"?: TagColor[];
-  "tag-sort"?: { tag: string }[];
-  "show-checkboxes"?: boolean;
+  "list-collapse"?: boolean[];
   [key: string]: unknown;
 }
 
@@ -208,7 +208,7 @@ export function normTime(t: string): string | null {
 }
 
 /** Mirrors obsidian-kanban's preprocessTitle with move-tags on and move-dates off. */
-export function cardDisplay(card: Card, opts: { moveTags: boolean } = { moveTags: true }): CardDisplay {
+export function cardDisplay(card: Card): CardDisplay {
   let md = cardText(card);
   const tags: string[] = [];
   const times: string[] = [];
@@ -217,7 +217,7 @@ export function cardDisplay(card: Card, opts: { moveTags: boolean } = { moveTags
   md = md.replace(TAG_RE, (m, pre, tag) => {
     if (/^\d+$/.test(tag)) return m;
     if (!tags.includes("#" + tag)) tags.push("#" + tag);
-    return opts.moveTags ? pre : m;
+    return pre;
   });
   md = md.replace(/(^|\s)@\{([^}]+)\}/g, (m, pre, d) => {
     if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return m;
@@ -245,10 +245,7 @@ export function setCardTime(card: Card, index: number, value: string | null): vo
     done = true;
     return value === null ? "" : `${pre}@@{${value}}`;
   });
-  if (!done && value !== null) {
-    const [first, ...rest] = text.split("\n");
-    text = [`${first.replace(/\s+$/, "")} @@{${value}}`, ...rest].join("\n");
-  }
+  if (!done && value !== null) text = appendToTitle(text, `@@{${value}}`);
   if (value === null && n > 1) {
     // Removing one end of "@@{a} - @@{b}" leaves the separator dangling.
     text = text
@@ -268,11 +265,13 @@ export function setCardDate(card: Card, value: string | null): void {
     done = true;
     return value === null ? "" : `${pre}@{${value}}`;
   });
-  if (!done && value !== null) {
-    const [first, ...rest] = text.split("\n");
-    text = [`${first.replace(/\s+$/, "")} @{${value}}`, ...rest].join("\n");
-  }
+  if (!done && value !== null) text = appendToTitle(text, `@{${value}}`);
   setCardText(card, value === null ? text.replace(/[ \t]+$/gm, "") : text);
+}
+
+function appendToTitle(text: string, token: string): string {
+  const [first, ...rest] = text.split("\n");
+  return [`${first.replace(/\s+$/, "")} ${token}`, ...rest].join("\n");
 }
 
 /** Tick or untick the nth "- [ ]" checklist line inside a card's continuation. */

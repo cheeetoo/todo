@@ -19,7 +19,6 @@ export interface DropResult {
 export interface DragHost {
   root(): HTMLElement | null;
   onDragStart(): void;
-  /** Return false to cancel (the element slides back). */
   onDrop(result: DropResult): void;
   onDragEnd(): void;
 }
@@ -48,7 +47,7 @@ interface Session {
 }
 
 export class DragController {
-  session: Session | null = null;
+  private session: Session | null = null;
   private host: DragHost;
 
   constructor(host: DragHost) {
@@ -120,16 +119,13 @@ export class DragController {
       }
       this.move(ev.clientX, ev.clientY);
     };
-    const onUp = (ev: PointerEvent) => {
+    const end = (drop: boolean) => (ev: PointerEvent) => {
       if (ev.pointerId !== pointerId) return;
       cleanup();
-      if (started) this.finish(true);
+      if (started) this.finish(drop);
     };
-    const onCancel = (ev: PointerEvent) => {
-      if (ev.pointerId !== pointerId) return;
-      cleanup();
-      if (started) this.finish(false);
-    };
+    const onUp = end(true);
+    const onCancel = end(false);
     const onKey = (ev: KeyboardEvent) => {
       if (ev.key !== "Escape" || !started) return;
       cancelEvent(ev);
@@ -345,9 +341,9 @@ export class DragController {
     s.win.cancelAnimationFrame(s.raf);
 
     const target = drop && s.lane >= 0 ? { lane: s.lane, index: s.index } : null;
-    // Fly to the gap (or back home), then hand over.
-    const home = (target && s.placeholder.isConnected ? s.placeholder : null) ?? this.restoreHome(s);
-    const r = home.getBoundingClientRect();
+    // Fly to the gap (or, cancelled, back home), then hand over.
+    if (!target || !s.placeholder.isConnected) s.el.parentElement?.insertBefore(s.placeholder, s.el);
+    const r = s.placeholder.getBoundingClientRect();
     s.overlay.style.transition = `transform 220ms ${DROP_EASE}`;
     s.overlay.style.transform = `translate3d(${r.left}px, ${r.top}px, 0)`;
 
@@ -368,12 +364,6 @@ export class DragController {
       this.host.onDragEnd();
     };
     s.win.setTimeout(done, 230);
-  }
-
-  /** Put the placeholder back where the element started, for a cancelled drag. */
-  private restoreHome(s: Session): HTMLElement {
-    s.el.parentElement?.insertBefore(s.placeholder, s.el);
-    return s.placeholder;
   }
 }
 

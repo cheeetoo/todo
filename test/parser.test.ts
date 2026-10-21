@@ -44,7 +44,6 @@ test("display pulls tags out and wraps times and dates like obsidian-kanban", ()
 
   assert.deepEqual(cardDisplay(newCard("study for philosophy quiz ==!==")).tags, []);
   assert.deepEqual(cardDisplay(newCard("fix issue #12 today")).tags, []);
-  assert.equal(cardDisplay(newCard("keep #tag inline"), { moveTags: false }).markdown, "keep #tag inline");
   // Not a valid time: left alone, as obsidian-kanban does.
   assert.equal(cardDisplay(newCard("at @@{soon}")).markdown, "at @@{soon}");
 });

@@ -44,23 +44,19 @@ export interface EditorOptions {
   onEnter(cm: EditorView, mod: boolean, shift: boolean): boolean;
   /** Escape that vim didn't need (vim is in normal mode, or vim is off). */
   onEscape(cm: EditorView): void;
+  /** The mobile Submit button. */
   onSubmit(cm: EditorView): void;
-  onChange?(cm: EditorView): void;
 }
 
 export interface MountedEditor {
-  cm: EditorView;
-  el: HTMLElement;
   value(): string;
   setValue(text: string): void;
-  focus(): void;
   destroy(): void;
 }
 
-/** obsidian-kanban's rule: on mobile Enter is a newline; on desktop it depends on new-line-trigger. */
-export function allowNewLine(trigger: "enter" | "shift-enter", mod: boolean, shift: boolean): boolean {
-  if (Platform.isMobile) return !(mod || shift);
-  return trigger === "enter" ? !(mod || shift) : mod || shift;
+/** Enter submits and Shift/Mod+Enter is a new line; on a phone (no Shift) Enter is a new line. */
+export function allowNewLine(mod: boolean, shift: boolean): boolean {
+  return Platform.isMobile ? !(mod || shift) : mod || shift;
 }
 
 function vimOf(cm: EditorView): any {
@@ -200,11 +196,6 @@ export function mountEditor(view: BoardView, parent: HTMLElement, opts: EditorOp
   class CardEditor extends Base {
     updateBottomPadding() {}
 
-    onUpdate(update: ViewUpdate, changed: boolean) {
-      super.onUpdate(update, changed);
-      if (update.docChanged) opts.onChange?.(update.view);
-    }
-
     buildLocalExtensions(): Extension[] {
       const extensions: Extension[] = super.buildLocalExtensions();
 
@@ -284,13 +275,8 @@ export function mountEditor(view: BoardView, parent: HTMLElement, opts: EditorOp
   if (Platform.isMobile) cm.dom.win.addEventListener("keyboardDidShow", onKeyboard);
 
   return {
-    cm,
-    el,
     value: () => cm.state.doc.toString(),
-    setValue(text: string) {
-      cm.dispatch({ changes: { from: 0, to: cm.state.doc.length, insert: text } });
-    },
-    focus: () => cm.focus(),
+    setValue: (text) => cm.dispatch({ changes: { from: 0, to: cm.state.doc.length, insert: text } }),
     destroy() {
       if (Platform.isMobile) cm.dom.win.removeEventListener("keyboardDidShow", onKeyboard);
       if (view.activeEditor === controller) view.activeEditor = null;

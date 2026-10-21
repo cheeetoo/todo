@@ -14,7 +14,7 @@
 
 import type { Board } from "../parser";
 
-export const DAY_START_HOUR = 4;
+const DAY_START_HOUR = 4;
 const MIN_MINUTES = 15;
 const SKIP_LANES = ["done", "archive", "complete"];
 const DONE_PREFIX = "✓ ";
@@ -122,7 +122,7 @@ export function readCard(body: string): Pick<Task, "title" | "tags" | "at" | "at
 }
 
 /** Cards from every lane except Done/Complete (the archive is never read). */
-export function tasksOf(board: Board): Task[] {
+function tasksOf(board: Board): Task[] {
   const tasks: Task[] = [];
   for (const lane of board.lanes) {
     if (SKIP_LANES.includes(lane.title.trim().toLowerCase())) continue;
@@ -144,7 +144,7 @@ export function tasksOf(board: Board): Task[] {
 // ---------------------------------------------------------------- dates
 
 const pad = (n: number) => String(n).padStart(2, "0");
-export const dayOf = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const dayOf = (d: Date) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 
 function at(day: string, minutes: number): Date {
   const [y, m, d] = day.split("-").map(Number);
@@ -152,7 +152,7 @@ function at(day: string, minutes: number): Date {
 }
 
 /** Whole days later, keeping the clock time across DST. */
-export function shiftDays(when: Date, days: number): Date {
+function shiftDays(when: Date, days: number): Date {
   const d = new Date(when);
   d.setDate(d.getDate() + days);
   return d;
@@ -161,12 +161,12 @@ export function shiftDays(when: Date, days: number): Date {
 const addDays = (day: string, n: number) => dayOf(shiftDays(at(day, 0), n));
 
 /** The date the board's "Today" means: before 04:00 it's still yesterday. */
-export function logicalToday(now: Date): string {
+function logicalToday(now: Date): string {
   return dayOf(now.getHours() < DAY_START_HOUR ? shiftDays(now, -1) : now);
 }
 
 /** When the logical day containing `when` began. */
-export const dayFloor = (when: Date) => at(logicalToday(when), DAY_START_HOUR * 60);
+const dayFloor = (when: Date) => at(logicalToday(when), DAY_START_HOUR * 60);
 
 /** Which date one clock reading on a card falls on. */
 function dayFor(clock: number, task: Task, today: string): string {
@@ -184,7 +184,7 @@ function rollForward(start: Date, end: Date, now: Date): [Date, Date] {
 const rolls = (task: Task) => task.on === null && !task.done;
 
 /** ISO 8601 with the local offset, as Google expects. */
-export function isoLocal(d: Date): string {
+function isoLocal(d: Date): string {
   const off = -d.getTimezoneOffset();
   const sign = off >= 0 ? "+" : "-";
   return (
@@ -195,7 +195,7 @@ export function isoLocal(d: Date): string {
 
 // ---------------------------------------------------------------- blocks
 
-export function buildBlocks(tasks: Task[], now: Date): Block[] {
+function buildBlocks(tasks: Task[], now: Date): Block[] {
   const today = logicalToday(now);
   const blocks: Block[] = [];
   const chained: [Date, Task][] = [];
@@ -241,7 +241,7 @@ export function buildBlocks(tasks: Task[], now: Date): Block[] {
 const blockDay = (b: Block) => dayOf(b.allDay ? b.start : b.end);
 
 /** Stable identity: the day plus the card text (as todocal computed it, so events carry over). */
-export const blockKey = (b: Block) => sha1(`${blockDay(b)}|${b.allDay ? "all-day|" : ""}${b.task.title.toLowerCase()}`);
+const blockKey = (b: Block) => sha1(`${blockDay(b)}|${b.allDay ? "all-day|" : ""}${b.task.title.toLowerCase()}`);
 
 // ---------------------------------------------------------------- events
 

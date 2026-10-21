@@ -104,7 +104,7 @@ export class CalendarSync {
   }
 
   private get settings() {
-    return this.plugin.data.calendar;
+    return this.plugin.settings.calendar;
   }
 
   start() {

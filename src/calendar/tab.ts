@@ -29,7 +29,7 @@ export class SettingsTab extends PluginSettingTab {
   display() {
     const el = this.containerEl;
     el.empty();
-    const s = this.plugin.data.calendar;
+    const s = this.plugin.settings.calendar;
     const save = () => this.plugin.saveSettings();
     const fail = (e: unknown) => new Notice(e instanceof Error ? e.message : String(e));
 

@@ -6,7 +6,7 @@ import { parseBoard, cardToMd } from "../src/parser.ts";
 
 const fixture = readFileSync(new URL("./fixture-TODO.md", import.meta.url), "utf8");
 const g = globalThis as any;
-const plugin = { globalSettings: { "show-checkboxes": false, "hide-card-count": true, "move-tags": true }, openAsMarkdown() {} };
+const plugin = { openAsMarkdown() {} };
 
 async function open(data = fixture) {
   const v: any = new BoardView({} as any, plugin as any);
@@ -34,8 +34,6 @@ test("renders obsidian-kanban's DOM, and opening writes nothing", async () => {
   assert.equal(tag.style.getPropertyValue("--tag-background"), "rgba(89, 122, 182, 1)");
   const times = [...done.querySelectorAll(".kanban-plugin__item-metadata-time")].map((t: any) => t.textContent);
   assert.deepEqual(times, ["23:15", "00:00"]);
-  // hide-card-count is on in the user's settings
-  assert.equal(v.contentEl.querySelectorAll(".kanban-plugin__lane-title-count").length, 0);
   // The empty-lane placeholder obsidian-kanban keeps at the end of every lane
   assert.ok(lanes[3].querySelector(".kanban-plugin__lane-items > .kanban-plugin__placeholder:only-child"));
 });
@@ -117,7 +115,7 @@ test("the card menu offers obsidian-kanban's actions", async () => {
   const wrapper = cardsIn(lanesEl(v)[2])[0];
   wrapper.querySelector(".kanban-plugin__item-postfix-button").click();
   const titles = g.lastMenu.items.map((i: any) => i.title);
-  for (const t of ["Edit card", "Duplicate card", "Insert card before", "Insert card after", "Move to top", "Move to bottom", "Delete card", "Move to list"])
+  for (const t of ["Edit card", "Move to top", "Move to bottom", "Delete card", "Add date", "Add time", "Move to list"])
     assert.ok(titles.includes(t), `menu has ${t}: ${titles}`);
   g.lastMenu.items.find((i: any) => i.title === "Move to list").submenu.items.find((i: any) => i.title === "WiP").click();
   assert.equal(lanesOf(v)[3].cards[0].title, "de-pangram #work");

@@ -77,11 +77,6 @@ body.tb-is-dragging * {
   font-size: var(--font-ui-small);
 }
 
-/* Board settings: tag colour rows */
-.tb-tag-colors .setting-item-name .tag {
-  font-size: var(--font-ui-small);
-}
-
 .tb-error {
   max-width: 34rem;
   margin: 3rem auto;

@@ -67,14 +67,11 @@ export class Google {
       throw: false,
     });
     if (res.status >= 400) {
-      const message = (() => {
-        try {
-          return res.json?.error?.message;
-        } catch {
-          return undefined;
-        }
-      })();
-      throw new GoogleError(res.status, message ?? `Google Calendar answered ${res.status}`);
+      let message = `Google Calendar answered ${res.status}`;
+      try {
+        message = res.json.error.message ?? message;
+      } catch {}
+      throw new GoogleError(res.status, message);
     }
     return res.status === 204 || !res.text ? null : res.json;
   }

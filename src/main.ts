@@ -1,25 +1,21 @@
-import { Plugin, TFile, normalizePath, type WorkspaceLeaf } from "obsidian";
+import { Plugin, TFile, type WorkspaceLeaf } from "obsidian";
 import { CalendarSync, DEFAULT_CALENDAR, type CalendarSettings } from "./calendar/sync";
 import { SettingsTab } from "./calendar/tab";
 import { isBoardFile } from "./parser";
-import { type Settings } from "./settings";
 import { DateSuggest, TagSuggest, TimeSuggest } from "./suggest";
 import { BoardView, VIEW_TYPE } from "./view";
 
 const KANBAN_ID = "obsidian-kanban";
 
 export default class TodoBoardPlugin extends Plugin {
-  /** Global board settings: the Kanban plugin's own data.json, so both stay in step. */
-  globalSettings: Partial<Settings> = {};
   /** This plugin's own settings (data.json, which Sync carries to other devices). */
-  data: { calendar: CalendarSettings } = { calendar: { ...DEFAULT_CALENDAR } };
+  settings: { calendar: CalendarSettings } = { calendar: { ...DEFAULT_CALENDAR } };
   calendar = new CalendarSync(this);
 
   /** Leaves the user switched to markdown, and for which file, so we don't flip them back. */
   private markdownLeaves = new WeakMap<WorkspaceLeaf, string>();
 
   async onload() {
-    await this.loadGlobalSettings();
     await this.loadSettings();
     this.addSettingTab(new SettingsTab(this));
     this.calendar.start();
@@ -88,24 +84,13 @@ export default class TodoBoardPlugin extends Plugin {
     this.app.workspace.onLayoutReady(() => this.adoptLeaves());
   }
 
-  private async loadGlobalSettings() {
-    const path = normalizePath(`${this.app.vault.configDir}/plugins/${KANBAN_ID}/data.json`);
-    try {
-      if (await this.app.vault.adapter.exists(path)) {
-        this.globalSettings = JSON.parse(await this.app.vault.adapter.read(path));
-      }
-    } catch (e) {
-      console.warn("TODO Board: couldn't read Kanban's settings", e);
-    }
-  }
-
   async loadSettings() {
     const saved = await this.loadData();
-    this.data = { calendar: { ...DEFAULT_CALENDAR, ...saved?.calendar } };
+    this.settings = { calendar: { ...DEFAULT_CALENDAR, ...saved?.calendar } };
   }
 
   saveSettings() {
-    return this.saveData(this.data);
+    return this.saveData(this.settings);
   }
 
   /** Another device changed data.json (e.g. signed in) and Sync brought it here. */
@@ -117,10 +102,6 @@ export default class TodoBoardPlugin extends Plugin {
     return file.extension === "md" && isBoardFile(this.app.metadataCache.getFileCache(file)?.frontmatter);
   }
 
-  kanbanEnabled(): boolean {
-    return !!(this.app as any).plugins?.enabledPlugins?.has(KANBAN_ID);
-  }
-
   async openAsBoard(leaf: WorkspaceLeaf, file: TFile, active = true) {
     this.markdownLeaves.delete(leaf);
     await leaf.setViewState({ type: VIEW_TYPE, state: { file: file.path }, active });
@@ -130,14 +111,11 @@ export default class TodoBoardPlugin extends Plugin {
     const file = (leaf.view as unknown as BoardView).file;
     if (!file) return;
     this.markdownLeaves.set(leaf, file.path);
-    // The Kanban plugin, if it's on, would grab this back unless told otherwise.
-    const kanban = (this.app as any).plugins?.plugins?.[KANBAN_ID];
-    if (kanban?.kanbanFileModes) kanban.kanbanFileModes[(leaf as any).id || file.path] = "markdown";
     await leaf.setViewState({ type: "markdown", state: { file: file.path }, active: true });
   }
 
   private adoptLeaves() {
-    if (this.kanbanEnabled()) return;
+    if ((this.app as any).plugins?.enabledPlugins?.has(KANBAN_ID)) return;
     const active = this.app.workspace.getMostRecentLeaf();
     this.app.workspace.iterateAllLeaves((leaf) => {
       const state = leaf.getViewState();
