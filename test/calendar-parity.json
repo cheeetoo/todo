@@ -1,0 +1,2462 @@
+[
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-20T09:00:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "6cb843686782b696564dbe80e1a4a19b44320265": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T09:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "5622536496cff5f6c20d4f8734f27f9311f72eea": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "8ba80b4255643648ae3f3c7c2b3cbbea25aeaae0": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "0029198a3c4185f6820787b3694b6662ac5d9a6b": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "49c7e5c68c172d61e0ba48d4154156b7357b12cb": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "b81b22359153a6a99b3ed7436f964305ccd38d7d": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "387d4ef7a049722b997468e6f4627f7a7d38cec2": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9fd737c6694acf2998b758db059d2e14911a8736": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "3a98df51679285ac6f5be8b15ceb4ebc0fa37bb0": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "cd2bb81cf2d6cd34e5936f945c6806d338dfd9be": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9111339180f85da50fd73aa1b1598feae026fd04": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "db03fa3e3464b63fcdb02475c58a9f03e452cef3": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "85c61eb4c51f1a4af09e3d752ca2b10ffa23e87c": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c78": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-20T15:47:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "8ba80b4255643648ae3f3c7c2b3cbbea25aeaae0": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "0029198a3c4185f6820787b3694b6662ac5d9a6b": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "49c7e5c68c172d61e0ba48d4154156b7357b12cb": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "b81b22359153a6a99b3ed7436f964305ccd38d7d": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "387d4ef7a049722b997468e6f4627f7a7d38cec2": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9fd737c6694acf2998b758db059d2e14911a8736": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "3a98df51679285ac6f5be8b15ceb4ebc0fa37bb0": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "cd2bb81cf2d6cd34e5936f945c6806d338dfd9be": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9111339180f85da50fd73aa1b1598feae026fd04": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "db03fa3e3464b63fcdb02475c58a9f03e452cef3": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "85c61eb4c51f1a4af09e3d752ca2b10ffa23e87c": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c78": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "a7ccaee73e9254adfe5c3b99e446b53025c0024a": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "bd8808657252cef1deb872688536d5ac53647734": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-20T22:10:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "0029198a3c4185f6820787b3694b6662ac5d9a6b": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T19:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "387d4ef7a049722b997468e6f4627f7a7d38cec2": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T22:10:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "3a98df51679285ac6f5be8b15ceb4ebc0fa37bb0": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "cd2bb81cf2d6cd34e5936f945c6806d338dfd9be": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9111339180f85da50fd73aa1b1598feae026fd04": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "db03fa3e3464b63fcdb02475c58a9f03e452cef3": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "85c61eb4c51f1a4af09e3d752ca2b10ffa23e87c": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c78": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "a7ccaee73e9254adfe5c3b99e446b53025c0024a": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "bd8808657252cef1deb872688536d5ac53647734": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "e1ad27c553ba0adf2ab6a69412b956dce0ec5459": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "f9f7629fd139c3da46f64ad89b89e7b612979848": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "9f157936c7ff1b6c50ddfe86485a940bc290081f": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "b0d91bc56c0764e9ff8ef1dbaa6c035e468369db": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-20T23:20:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "0029198a3c4185f6820787b3694b6662ac5d9a6b": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T19:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9111339180f85da50fd73aa1b1598feae026fd04": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "db03fa3e3464b63fcdb02475c58a9f03e452cef3": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T23:20:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "85c61eb4c51f1a4af09e3d752ca2b10ffa23e87c": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c78": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "a7ccaee73e9254adfe5c3b99e446b53025c0024a": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "bd8808657252cef1deb872688536d5ac53647734": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "e1ad27c553ba0adf2ab6a69412b956dce0ec5459": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "f9f7629fd139c3da46f64ad89b89e7b612979848": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "9f157936c7ff1b6c50ddfe86485a940bc290081f": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "8e72a0bb46cd8a8af8ea169da9cd5c136fb359da": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "b0d91bc56c0764e9ff8ef1dbaa6c035e468369db": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "769d045c7b50b9fc091a5c7a3f679c1f9ac67d98": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "7e694ed1a90bf5fa2696b9248a963b221677b3e0": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-21T00:45:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "0029198a3c4185f6820787b3694b6662ac5d9a6b": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T19:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9111339180f85da50fd73aa1b1598feae026fd04": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "85c61eb4c51f1a4af09e3d752ca2b10ffa23e87c": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T00:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c78": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "ca33d740e4a52b977f56fcf4b20a4c721c538c01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "a7ccaee73e9254adfe5c3b99e446b53025c0024a": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "bd8808657252cef1deb872688536d5ac53647734": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "e1ad27c553ba0adf2ab6a69412b956dce0ec5459": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "f9f7629fd139c3da46f64ad89b89e7b612979848": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "9f157936c7ff1b6c50ddfe86485a940bc290081f": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "8e72a0bb46cd8a8af8ea169da9cd5c136fb359da": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "b0d91bc56c0764e9ff8ef1dbaa6c035e468369db": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "769d045c7b50b9fc091a5c7a3f679c1f9ac67d98": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "7e694ed1a90bf5fa2696b9248a963b221677b3e0": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "654c5834bc4fb52c0ea7f243250d0cddae707399": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-21T03:59:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "0029198a3c4185f6820787b3694b6662ac5d9a6b": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-20T19:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-20T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-20"
+   },
+   "9111339180f85da50fd73aa1b1598feae026fd04": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-20T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "a7ccaee73e9254adfe5c3b99e446b53025c0024a": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "bd8808657252cef1deb872688536d5ac53647734": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "e1ad27c553ba0adf2ab6a69412b956dce0ec5459": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "f9f7629fd139c3da46f64ad89b89e7b612979848": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "9f157936c7ff1b6c50ddfe86485a940bc290081f": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "8e72a0bb46cd8a8af8ea169da9cd5c136fb359da": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "b0d91bc56c0764e9ff8ef1dbaa6c035e468369db": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "769d045c7b50b9fc091a5c7a3f679c1f9ac67d98": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "7e694ed1a90bf5fa2696b9248a963b221677b3e0": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "654c5834bc4fb52c0ea7f243250d0cddae707399": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "fd47e37447b8e36215c833b6bbbb18e56c42a79b": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-22T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "6c36a0224af33199cd7f2ea80105bc5c41453ae8": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-22T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "6c36a0224af33199cd7f2ea80105bc5c41453a01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-22T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-21T04:00:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "a7ccaee73e9254adfe5c3b99e446b53025c0024a": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "bd8808657252cef1deb872688536d5ac53647734": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "e1ad27c553ba0adf2ab6a69412b956dce0ec5459": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "8eaf5755164ce0c8be32d1aa32c4d6e8b2d7f58f": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "f9f7629fd139c3da46f64ad89b89e7b612979848": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "9f157936c7ff1b6c50ddfe86485a940bc290081f": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "8e72a0bb46cd8a8af8ea169da9cd5c136fb359da": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "b0d91bc56c0764e9ff8ef1dbaa6c035e468369db": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "769d045c7b50b9fc091a5c7a3f679c1f9ac67d98": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "7e694ed1a90bf5fa2696b9248a963b221677b3e0": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-21"
+   },
+   "e5f1a55b97a2cd48194de13c9923a661b73d47d5": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-21T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "654c5834bc4fb52c0ea7f243250d0cddae707399": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-21T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "fd47e37447b8e36215c833b6bbbb18e56c42a79b": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-22T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "6c36a0224af33199cd7f2ea80105bc5c41453ae8": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-22T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "6c36a0224af33199cd7f2ea80105bc5c41453a01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-22T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-22T02:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-22"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-10-31T23:30:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T09:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "8f595a8c4cbe3c8944488da7f9dcedd3e874325f": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-31T19:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-31T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-31"
+   },
+   "6c1780cebf8257bd4c17cde7c335eec3a7764cc9": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-31T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T05:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "ba7d840ebf740ad719bf43f3d1c83eb33365e9c9": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-31T23:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "742da229fd44ba634c025043f121a7d64f37eb51": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "92bde6e38857ff298ac894639da34fdea0881fbd": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T02:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "92bde6e38857ff298ac894639da34fdea0881f01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T02:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "3db52e4d09d6b5408fb56e5d906da7a55005fbc1": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T05:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T09:05:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "24f0a38fafd6ac1461bf061c6f717e0300327b78": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T09:05:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T14:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "c17393fc533fe8c4b735825a50063b7b132cbfa5": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T16:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T18:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "5d9cf0207672557d3d84079689cd4588bcc8df70": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T18:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T21:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "d9967b28ce741f70138df8fc34067e2193f7c2bb": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T21:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T21:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "c368ad85e5aff5c1f403c5a97be65deb95f18337": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T21:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T22:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "03eaacdd967cb3fa5a836ad50e7fb3b92e02a449": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T22:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T22:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "98420f43747962429a788385fd0d70fdb5a204b4": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T22:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T23:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "6179e51b1ea51e259e7f576eb822e565aee81616": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T23:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T23:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-11-01T01:30:00",
+  "events": {
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T09:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "8f595a8c4cbe3c8944488da7f9dcedd3e874325f": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-10-31T19:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-31T20:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-31"
+   },
+   "6c1780cebf8257bd4c17cde7c335eec3a7764cc9": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-31T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T05:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "92bde6e38857ff298ac894639da34fdea0881fbd": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T01:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T02:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "92bde6e38857ff298ac894639da34fdea0881f01": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T01:45:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T02:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "3db52e4d09d6b5408fb56e5d906da7a55005fbc1": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T05:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T09:05:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "24f0a38fafd6ac1461bf061c6f717e0300327b78": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T09:05:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T14:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "c17393fc533fe8c4b735825a50063b7b132cbfa5": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T16:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T18:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "5d9cf0207672557d3d84079689cd4588bcc8df70": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T18:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T21:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "d9967b28ce741f70138df8fc34067e2193f7c2bb": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T21:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T21:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "c368ad85e5aff5c1f403c5a97be65deb95f18337": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T21:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T22:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "03eaacdd967cb3fa5a836ad50e7fb3b92e02a449": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-11-01T22:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T22:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "98420f43747962429a788385fd0d70fdb5a204b4": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T22:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T23:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "6179e51b1ea51e259e7f576eb822e565aee81616": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T23:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-01T23:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-01"
+   },
+   "9968cbc222dcb6ba45e30fc92e2f09fc4b04a260": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-01T23:15:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-02T00:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-02"
+   },
+   "5998226d9feffd2b70104ceb349a0fbac467b0c2": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-11-02T00:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-11-02T01:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-11-02"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "synthetic.md",
+  "now": "2026-03-08T01:30:00",
+  "events": {
+   "63db17eb37a0825120c4f142fde1b1c2aa8211bc": {
+    "summary": "✓ [work] ticked off",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-07T19:45:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-07T20:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-07"
+   },
+   "a6f27fb4641f5d754f9717dd5cdadf67ca2071b0": {
+    "summary": "overnight pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-03-07T23:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "e8da1fb3bdeb0e2457257ae88c1341ab37870816": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-08T01:30:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T02:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "e8da1fb3bdeb0e2457257ae88c1341ab37870801": {
+    "summary": "duplicate",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-08T01:45:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T02:00:00-05:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "9ae1500ecdf611b3e320898a1b83e1d486a111ca": {
+    "summary": "early thing",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-03-08T05:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "e7399aaf920c93a9a5d77bcbf3521391b046c860": {
+    "summary": "[school/work] up to speed on topology",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-03-08T09:05:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T14:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "74c6a54b2b253d1ca0f80b67bc9cb0e3ec8ec3c8": {
+    "summary": "[sl] range meeting",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-03-08T16:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "3061da0fed7d826190fdb61714c2fb4017011963": {
+    "summary": "pm style",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-03-08T18:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "6f1022d8c338b01719eb8274257c1281d6d69c9d": {
+    "summary": "wiki form",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-03-08T21:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "12f9a487a6a9a8dae8c8b9c5fb3c638851b5c570": {
+    "summary": "[sl] read over post",
+    "description": "some notes here\n- [ ] a subtask\n\nFrom TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-08T21:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "9fe613e26c43d2ce0283000c3cfe9f650ee1a418": {
+    "summary": "moment pin",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-03-08T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T22:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "a29f95e8199c26b0d69d4f93acade1c050dab822": {
+    "summary": "shared deadline one",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-08T22:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "379644084cc45551b3bfe57d392a59065bac2fc0": {
+    "summary": "shared deadline two",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-08T23:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-08T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-08"
+   },
+   "46fa399d7c133e558837dc0019fec23fa5ba5d51": {
+    "summary": "after midnight",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-08T23:15:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-09T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-09"
+   },
+   "bc8e518913cb7d437d50ce2ba25ce14d317315a6": {
+    "summary": "dash title",
+    "description": "From TODO.md · Today",
+    "start": {
+     "dateTime": "2026-03-09T00:30:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-03-09T01:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-03-09"
+   },
+   "3109dd5afa54c5a4cba4965da02bd1b966701d74": {
+    "summary": "all day today",
+    "description": "From TODO.md · Today",
+    "start": {
+     "date": "2026-10-20"
+    },
+    "end": {
+     "date": "2026-10-21"
+    },
+    "day": "2026-10-20"
+   },
+   "fe32fa018ea50a1b32016ed62bdfc9ec7f3174a7": {
+    "summary": "dated with time",
+    "description": "From TODO.md · Week",
+    "start": {
+     "dateTime": "2026-10-25T04:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "end": {
+     "dateTime": "2026-10-25T10:00:00-04:00",
+     "timeZone": "America/New_York"
+    },
+    "day": "2026-10-25"
+   },
+   "679f3bde2fea60a31399dc43f1e7e0448a1c5012": {
+    "summary": "[life] file taxes",
+    "description": "From TODO.md · Later",
+    "start": {
+     "date": "2026-11-03"
+    },
+    "end": {
+     "date": "2026-11-04"
+    },
+    "day": "2026-11-03"
+   }
+  }
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-20T09:00:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-20T15:47:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-20T22:10:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-20T23:20:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-21T00:45:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-21T03:59:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-21T04:00:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-10-31T23:30:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-11-01T01:30:00",
+  "events": {}
+ },
+ {
+  "board": "current.md",
+  "now": "2026-03-08T01:30:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-20T09:00:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-20T15:47:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-20T22:10:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-20T23:20:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-21T00:45:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-21T03:59:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-21T04:00:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-10-31T23:30:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-11-01T01:30:00",
+  "events": {}
+ },
+ {
+  "board": "fixture.md",
+  "now": "2026-03-08T01:30:00",
+  "events": {}
+ }
+]

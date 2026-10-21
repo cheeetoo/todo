@@ -107,3 +107,8 @@ export class WorkspaceLeaf {}
 export const normalizePath = (p: string) => p;
 export class Modal { app: unknown; constructor(app: unknown) { this.app = app; } open() {} close() {} }
 export class Setting { constructor(_el: unknown) {} }
+export const requestUrl = async () => {
+  throw new Error("no network in tests");
+};
+export const debounce = (fn: (...a: unknown[]) => unknown) => fn;
+export class PluginSettingTab {}

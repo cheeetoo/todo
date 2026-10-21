@@ -1,4 +1,6 @@
 import { Plugin, TFile, normalizePath, type WorkspaceLeaf } from "obsidian";
+import { CalendarSync, DEFAULT_CALENDAR, type CalendarSettings } from "./calendar/sync";
+import { SettingsTab } from "./calendar/tab";
 import { isBoardFile } from "./parser";
 import { type Settings } from "./settings";
 import { DateSuggest, TagSuggest, TimeSuggest } from "./suggest";
@@ -9,12 +11,18 @@ const KANBAN_ID = "obsidian-kanban";
 export default class TodoBoardPlugin extends Plugin {
   /** Global board settings: the Kanban plugin's own data.json, so both stay in step. */
   globalSettings: Partial<Settings> = {};
+  /** This plugin's own settings (data.json, which Sync carries to other devices). */
+  data: { calendar: CalendarSettings } = { calendar: { ...DEFAULT_CALENDAR } };
+  calendar = new CalendarSync(this);
 
   /** Leaves the user switched to markdown, and for which file, so we don't flip them back. */
   private markdownLeaves = new WeakMap<WorkspaceLeaf, string>();
 
   async onload() {
     await this.loadGlobalSettings();
+    await this.loadSettings();
+    this.addSettingTab(new SettingsTab(this));
+    this.calendar.start();
 
     this.registerView(VIEW_TYPE, (leaf) => new BoardView(leaf, this));
     this.registerHoverLinkSource(VIEW_TYPE, { display: "TODO Board", defaultMod: true });
@@ -54,6 +62,12 @@ export default class TodoBoardPlugin extends Plugin {
       },
     });
 
+    this.addCommand({
+      id: "sync-calendar",
+      name: "Sync calendar now",
+      callback: () => this.calendar.sync(),
+    });
+
     this.registerEvent(
       this.app.workspace.on("file-menu", (menu, file, _source, leaf) => {
         if (!(file instanceof TFile) || !this.isBoard(file)) return;
@@ -83,6 +97,20 @@ export default class TodoBoardPlugin extends Plugin {
     } catch (e) {
       console.warn("TODO Board: couldn't read Kanban's settings", e);
     }
+  }
+
+  async loadSettings() {
+    const saved = await this.loadData();
+    this.data = { calendar: { ...DEFAULT_CALENDAR, ...saved?.calendar } };
+  }
+
+  saveSettings() {
+    return this.saveData(this.data);
+  }
+
+  /** Another device changed data.json (e.g. signed in) and Sync brought it here. */
+  async onExternalSettingsChange() {
+    await this.loadSettings();
   }
 
   isBoard(file: TFile): boolean {
