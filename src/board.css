@@ -1,0 +1,92 @@
+/* TODO Board: additions on top of obsidian-kanban's stylesheet (kanban.css),
+   whose class names the board uses so it looks the same. */
+
+.workspace-leaf-content[data-type=todo-board] .view-content {
+  padding: 0;
+}
+.workspace-leaf-content[data-type=todo-board] > .view-header {
+  display: flex !important;
+}
+
+/* On mobile Obsidian pads every editor's scroller to clear the note header,
+   which leaves a tall blank band above the text in a card. Not here. */
+.workspace-leaf-content[data-type=todo-board] .kanban-plugin .markdown-source-view.mod-cm6 .cm-scroller,
+.is-phone .mod-root .workspace-leaf-content[data-type=todo-board] .view-content .kanban-plugin .markdown-source-view.mod-cm6 > .cm-editor > .cm-scroller {
+  padding-block: 0;
+}
+
+/* Mobile cards inherit Obsidian's pill-shaped input radius (as in obsidian-kanban);
+   inset the editor so the corners don't clip the text. */
+.is-mobile .workspace-leaf-content[data-type=todo-board] .kanban-plugin__item-title-wrapper > .kanban-plugin__item-input-wrapper {
+  padding: 4px calc(var(--input-radius) / 4);
+}
+
+/* Collapsed lanes keep their cards in the DOM (so search can fold lanes
+   without a redraw); obsidian-kanban doesn't render them at all. */
+.kanban-plugin__lane-wrapper.collapse-horizontal .kanban-plugin__lane-items,
+.kanban-plugin__lane-wrapper.collapse-horizontal .kanban-plugin__item-button-wrapper,
+.kanban-plugin__lane-wrapper.collapse-horizontal .kanban-plugin__item-form,
+.kanban-plugin__lane-wrapper.collapse-horizontal .kanban-plugin__action-confirm-wrapper {
+  display: none;
+}
+
+/* Search */
+.kanban-plugin__item-wrapper.tb-search-hidden {
+  display: none;
+}
+.kanban-plugin.tb-searching .kanban-plugin__item-button-wrapper,
+.kanban-plugin.tb-searching .kanban-plugin__item-form {
+  display: none;
+}
+
+/* Drag and drop: the source hides, a same-sized gap opens where it will land. */
+.kanban-plugin__item-wrapper.tb-drag-source,
+.kanban-plugin__lane-wrapper.tb-drag-source {
+  display: none !important;
+}
+.tb-placeholder {
+  flex-shrink: 0;
+  pointer-events: none;
+}
+.tb-placeholder[data-kind=lane] {
+  height: 100%;
+  margin-inline-end: 10px;
+}
+body.tb-is-dragging,
+body.tb-is-dragging * {
+  cursor: grabbing !important;
+}
+.tb-drag-overlay > .kanban-plugin__lane-wrapper {
+  height: auto;
+}
+
+/* Phones: a long press starts a drag, so don't select text or pop the callout. */
+.is-mobile .kanban-plugin__item-wrapper,
+.is-mobile .kanban-plugin__lane-grip {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Autocomplete */
+.tb-suggest-note {
+  color: var(--text-faint);
+  font-size: var(--font-ui-smaller);
+}
+.suggestion-item .tb-suggest-tag {
+  font-size: var(--font-ui-small);
+}
+
+/* Archive (shown from the "…" menu) */
+.tb-archive-lane .kanban-plugin__lane {
+  opacity: 0.9;
+}
+
+.tb-error {
+  max-width: 34rem;
+  margin: 3rem auto;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(var(--background-modifier-error-rgb), 0.4);
+  border-radius: 8px;
+  background-color: rgba(var(--background-modifier-error-rgb), 0.08);
+}

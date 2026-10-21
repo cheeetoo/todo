@@ -2,7 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
-  parseBoard, serializeBoard, cardMeta, cardText, setCardText, newCard, toggleSubtask, BoardParseError,
+  parseBoard, serializeBoard, cardDisplay, cardText, setCardText, setCardTime, newCard, toggleSubtask, updateSettings,
+  BoardParseError,
 } from "../src/parser.ts";
 
 const fixture = readFileSync(new URL("./fixture-TODO.md", import.meta.url), "utf8");
@@ -30,19 +31,44 @@ test("multi-line cards keep their continuation lines", () => {
   assert.equal(serializeBoard(b), before);
 });
 
-test("meta pulls out tags, times and dates", () => {
-  const m = cardMeta(newCard("send regatta report @@{23:15} - @@{00:00}  #sailing"));
+test("display pulls tags out and wraps times and dates like obsidian-kanban", () => {
+  const m = cardDisplay(newCard("send regatta report @@{23:15} - @@{00:00}  #sailing"));
   assert.deepEqual(m.tags, ["#sailing"]);
   assert.deepEqual(m.times, ["23:15", "00:00"]);
-  assert.equal(m.body, "send regatta report");
+  assert.match(m.markdown, /^send regatta report <span class="kanban-plugin__preview-time-wrapper kanban-plugin__date"><span class="kanban-plugin__preview-time kanban-plugin__item-metadata-time">23:15<\/span><\/span> - <span/);
+  assert.doesNotMatch(m.markdown, /#sailing/);
 
-  const d = cardMeta(newCard("hand in problem set #work @{2026-09-25}"));
+  const d = cardDisplay(newCard("hand in problem set #work @{2026-09-25}"));
   assert.deepEqual(d.dates, ["2026-09-25"]);
-  assert.deepEqual(d.times, []);
-  assert.equal(d.body, "hand in problem set");
+  assert.match(d.markdown, /kanban-plugin__item-metadata-date">2026-09-25</);
 
-  assert.deepEqual(cardMeta(newCard("study for philosophy quiz ==!==")).tags, []);
-  assert.deepEqual(cardMeta(newCard("fix issue #12 today")).tags, []);
+  assert.deepEqual(cardDisplay(newCard("study for philosophy quiz ==!==")).tags, []);
+  assert.deepEqual(cardDisplay(newCard("fix issue #12 today")).tags, []);
+  assert.equal(cardDisplay(newCard("keep #tag inline"), { moveTags: false }).markdown, "keep #tag inline");
+  // Not a valid time: left alone, as obsidian-kanban does.
+  assert.equal(cardDisplay(newCard("at @@{soon}")).markdown, "at @@{soon}");
+});
+
+test("setting, adding and removing a card's times", () => {
+  const c = newCard("send regatta report @@{23:15} - @@{00:00}  #sailing");
+  setCardTime(c, 1, "00:30");
+  assert.equal(c.title, "send regatta report @@{23:15} - @@{00:30}  #sailing");
+  setCardTime(c, 1, null);
+  assert.equal(c.title, "send regatta report @@{23:15}  #sailing");
+  setCardTime(c, 0, null);
+  assert.equal(c.title, "send regatta report  #sailing");
+  setCardTime(c, 0, "21:00");
+  assert.equal(c.title, "send regatta report  #sailing @@{21:00}");
+});
+
+test("changing settings rewrites only the settings block", () => {
+  const b = parseBoard(fixture);
+  updateSettings(b, { "list-collapse": [false, false, true, false, false] });
+  const out = serializeBoard(b);
+  const before = fixture.slice(0, fixture.indexOf("%% kanban:settings"));
+  assert.ok(out.startsWith(before));
+  assert.deepEqual(parseBoard(out).settings["list-collapse"], [false, false, true, false, false]);
+  assert.deepEqual(parseBoard(out).settings["tag-colors"], b.settings["tag-colors"]);
 });
 
 test("an empty board and one without an archive round-trip", () => {

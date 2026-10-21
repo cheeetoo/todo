@@ -11,6 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@codemirror/commands": "^6.11.1",
+    "@codemirror/state": "^6.7.6",
+    "@codemirror/view": "^6.43.13",
     "@types/node": "^26.6.5",
     "esbuild": "^0.28.2",
     "happy-dom": "^21.0.4",

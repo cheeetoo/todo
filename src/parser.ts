@@ -157,10 +157,16 @@ export function serializeBoard(board: Board): string {
     lines.push("", "", "");
     out += lines.join("\n");
   }
-  if (board.archive) {
+  if (board.archive?.length) {
     out += [ARCHIVE_RULE, "", "## Archive", "", ...board.archive.map(cardToMd)].join("\n");
   }
   return out + board.settingsBlock;
+}
+
+/** Change board settings; the block is rewritten the way obsidian-kanban writes it. */
+export function updateSettings(board: Board, patch: BoardSettings): void {
+  board.settings = { ...board.settings, ...patch };
+  board.settingsBlock = ["", "", "%% kanban:settings", "```", JSON.stringify(board.settings), "```", "%%"].join("\n");
 }
 
 // ---- Card text as the user edits it: continuation lines lose one tab. ----
@@ -183,45 +189,75 @@ export function newCard(text: string, done = false): Card {
 
 // ---- Pulling tags, times and dates out of a card for display. ----
 
-export interface CardMeta {
+const TAG_RE = /(^|\s)#([\p{L}\p{N}_\-/]+)/gu;
+
+export interface CardDisplay {
+  /** Markdown to render: tags pulled out, times/dates swapped for obsidian-kanban's spans. */
+  markdown: string;
   tags: string[];
   times: string[];
   dates: string[];
-  /** Markdown with tags/times/dates removed. */
-  body: string;
 }
 
-const TIME_RE = /@@(?:\{([^}]*)\}|\[\[([^\]]*)\]\])/g;
-const DATE_RE = /(?<!@)@(?:\{([^}]*)\}|\[\[([^\]]*)\]\])/g;
-const TAG_RE = /(^|\s)#([\p{L}\p{N}_\-/]+)/gu;
+const KB = "kanban-plugin__";
 
-export function cardMeta(card: Card): CardMeta {
-  let body = cardText(card);
+function normTime(t: string): string | null {
+  const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (!m || +m[1] > 23 || +m[2] > 59) return null;
+  return m[1].padStart(2, "0") + ":" + m[2];
+}
+
+/** Mirrors obsidian-kanban's preprocessTitle with move-tags on and move-dates off. */
+export function cardDisplay(card: Card, opts: { moveTags: boolean } = { moveTags: true }): CardDisplay {
+  let md = cardText(card);
   const tags: string[] = [];
   const times: string[] = [];
   const dates: string[] = [];
 
-  body = body.replace(TIME_RE, (_m, a, b) => {
-    times.push(a ?? b);
-    return "";
+  md = md.replace(TAG_RE, (m, pre, tag) => {
+    if (/^\d+$/.test(tag)) return m;
+    if (!tags.includes("#" + tag)) tags.push("#" + tag);
+    return opts.moveTags ? pre : m;
   });
-  body = body.replace(DATE_RE, (_m, a, b) => {
-    dates.push(a ?? b);
-    return "";
+  md = md.replace(/(^|\s)@\{([^}]+)\}/g, (m, pre, d) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) return m;
+    dates.push(d);
+    return `${pre}<span class="${KB}preview-date-wrapper ${KB}date"><span class="${KB}preview-date ${KB}item-metadata-date">${d}</span></span>`;
   });
-  body = body.replace(TAG_RE, (_m, pre, tag) => {
-    if (!/^\d+$/.test(tag) && !tags.includes("#" + tag)) tags.push("#" + tag);
-    return pre;
+  md = md.replace(/(^|\s)@@\{([^}]+)\}/g, (m, pre, t) => {
+    const time = normTime(t);
+    if (!time) return m;
+    times.push(time);
+    return `${pre}<span class="${KB}preview-time-wrapper ${KB}date"><span class="${KB}preview-time ${KB}item-metadata-time">${time}</span></span>`;
   });
-  // A range "@@{22:00} - @@{22:30}" leaves a bare separator behind.
-  if (times.length > 1) body = body.replace(/[ \t]+(?:-|–|to|until)[ \t]*(?=$|\n)/gm, "");
-  body = body
-    .split("\n")
-    .map((l) => l.replace(/[ \t]+$/, ""))
-    .filter((l, i) => i === 0 || l.trim() !== "")
-    .join("\n");
 
-  return { tags, times, dates, body };
+  tags.sort((a, b) => a.localeCompare(b));
+  return { markdown: md, tags, times, dates };
+}
+
+/** Replace, add (index === times.length) or remove (value null) the nth @@{time} on a card. */
+export function setCardTime(card: Card, index: number, value: string | null): void {
+  let text = cardText(card);
+  let n = 0;
+  let done = false;
+  text = text.replace(/(^|\s)@@\{([^}]+)\}/g, (m, pre) => {
+    if (n++ !== index) return m;
+    done = true;
+    return value === null ? "" : `${pre}@@{${value}}`;
+  });
+  if (!done && value !== null) {
+    const [first, ...rest] = text.split("\n");
+    text = [`${first.replace(/\s+$/, "")} @@{${value}}`, ...rest].join("\n");
+  }
+  if (value === null && n > 1) {
+    // Removing one end of "@@{a} - @@{b}" leaves the separator dangling.
+    text = text
+      // "@@{a} - " with nothing after: drop the separator.
+      .replace(/(@@\{[^}]+\})[ \t]+(?:-|–|to|until)(?=\s|$)(?![ \t]*@@\{)/g, "$1")
+      // " - @@{b}" with no time before it: likewise.
+      .replace(/(?<!\})([ \t]+)(?:-|–|to|until)[ \t]+(?=@@\{)/g, " ");
+  }
+  setCardText(card, text.replace(/[ \t]+$/gm, ""));
 }
 
 /** Tick or untick the nth "- [ ]" checklist line inside a card's continuation. */

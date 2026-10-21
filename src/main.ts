@@ -1,15 +1,32 @@
-import { Plugin, TFile, WorkspaceLeaf } from "obsidian";
+import { Plugin, TFile, normalizePath, type WorkspaceLeaf } from "obsidian";
 import { isBoardFile } from "./parser";
+import { type Settings } from "./settings";
+import { DateSuggest, TagSuggest, TimeSuggest } from "./suggest";
 import { BoardView, VIEW_TYPE } from "./view";
 
 const KANBAN_ID = "obsidian-kanban";
 
 export default class TodoBoardPlugin extends Plugin {
+  /** Global board settings: the Kanban plugin's own data.json, so both stay in step. */
+  globalSettings: Partial<Settings> = {};
+
   /** Leaves the user switched to markdown, and for which file, so we don't flip them back. */
   private markdownLeaves = new WeakMap<WorkspaceLeaf, string>();
 
   async onload() {
+    await this.loadGlobalSettings();
+
     this.registerView(VIEW_TYPE, (leaf) => new BoardView(leaf, this));
+    this.registerHoverLinkSource(VIEW_TYPE, { display: "TODO Board", defaultMod: true });
+
+    // Ours go first so they win over Obsidian's built-in tag suggester in cards.
+    const suggests = [new TagSuggest(this.app), new TimeSuggest(this.app), new DateSuggest(this.app)];
+    for (const s of suggests) this.registerEditorSuggest(s);
+    const list: unknown[] | undefined = (this.app.workspace as any).editorSuggest?.suggests;
+    if (list) {
+      for (const s of suggests) list.remove(s);
+      list.unshift(...suggests);
+    }
 
     this.addCommand({
       id: "toggle-view",
@@ -26,6 +43,17 @@ export default class TodoBoardPlugin extends Plugin {
       },
     });
 
+    this.addCommand({
+      id: "archive-completed",
+      name: "Archive completed cards",
+      checkCallback: (checking) => {
+        const view = this.app.workspace.getActiveViewOfType(BoardView);
+        if (!view) return false;
+        if (!checking) view.archiveCompleted();
+        return true;
+      },
+    });
+
     this.registerEvent(
       this.app.workspace.on("file-menu", (menu, file, _source, leaf) => {
         if (!(file instanceof TFile) || !this.isBoard(file)) return;
@@ -33,7 +61,7 @@ export default class TodoBoardPlugin extends Plugin {
         menu.addItem((item) =>
           item
             .setTitle("Open as board")
-            .setIcon("kanban")
+            .setIcon("lucide-trello")
             .setSection("pane")
             .onClick(() => this.openAsBoard(leaf ?? this.app.workspace.getLeaf(), file)),
         );
@@ -44,6 +72,17 @@ export default class TodoBoardPlugin extends Plugin {
     // two never fight over the same tab.
     this.registerEvent(this.app.workspace.on("file-open", () => this.adoptLeaves()));
     this.app.workspace.onLayoutReady(() => this.adoptLeaves());
+  }
+
+  private async loadGlobalSettings() {
+    const path = normalizePath(`${this.app.vault.configDir}/plugins/${KANBAN_ID}/data.json`);
+    try {
+      if (await this.app.vault.adapter.exists(path)) {
+        this.globalSettings = JSON.parse(await this.app.vault.adapter.read(path));
+      }
+    } catch (e) {
+      console.warn("TODO Board: couldn't read Kanban's settings", e);
+    }
   }
 
   isBoard(file: TFile): boolean {
@@ -60,9 +99,12 @@ export default class TodoBoardPlugin extends Plugin {
   }
 
   async openAsMarkdown(leaf: WorkspaceLeaf) {
-    const file = (leaf.view as BoardView).file;
+    const file = (leaf.view as unknown as BoardView).file;
     if (!file) return;
     this.markdownLeaves.set(leaf, file.path);
+    // The Kanban plugin, if it's on, would grab this back unless told otherwise.
+    const kanban = (this.app as any).plugins?.plugins?.[KANBAN_ID];
+    if (kanban?.kanbanFileModes) kanban.kanbanFileModes[(leaf as any).id || file.path] = "markdown";
     await leaf.setViewState({ type: "markdown", state: { file: file.path }, active: true });
   }
 

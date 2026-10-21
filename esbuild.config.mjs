@@ -1,9 +1,11 @@
 // Builds main.js and installs the plugin into the vault.
 import esbuild from "esbuild";
-import { copyFileSync, mkdirSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-const VAULT_PLUGIN = join(process.env.HOME, "Documents/new/.obsidian/plugins/todo-board");
+// BOARD_VAULT=/path/to/vault installs somewhere else (e.g. a test vault).
+const VAULT = process.env.BOARD_VAULT ?? join(process.env.HOME, "Documents/new");
+const VAULT_PLUGIN = join(VAULT, ".obsidian/plugins/todo-board");
 const watch = process.argv.includes("--watch");
 
 const install = {
@@ -11,6 +13,8 @@ const install = {
   setup(build) {
     build.onEnd((result) => {
       if (result.errors.length) return;
+      // obsidian-kanban's stylesheet, then ours.
+      writeFileSync("styles.css", readFileSync("src/kanban.css", "utf8") + "\n\n" + readFileSync("src/board.css", "utf8"));
       mkdirSync(VAULT_PLUGIN, { recursive: true });
       for (const f of ["main.js", "manifest.json", "styles.css"]) copyFileSync(f, join(VAULT_PLUGIN, f));
       console.log(`installed → ${VAULT_PLUGIN}`);
