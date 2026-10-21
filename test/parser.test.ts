@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
-  parseBoard, serializeBoard, cardDisplay, cardText, setCardText, setCardTime, newCard, toggleSubtask, updateSettings,
+  parseBoard, serializeBoard, cardDisplay, cardText, setCardText, setCardTime, setCardDate, newCard, toggleSubtask, updateSettings,
   BoardParseError,
 } from "../src/parser.ts";
 
@@ -59,6 +59,16 @@ test("setting, adding and removing a card's times", () => {
   assert.equal(c.title, "send regatta report  #sailing");
   setCardTime(c, 0, "21:00");
   assert.equal(c.title, "send regatta report  #sailing @@{21:00}");
+});
+
+test("setting and removing a card's date", () => {
+  const c = newCard("hand in problem set #work @@{09:00}");
+  setCardDate(c, "2026-10-21");
+  assert.equal(c.title, "hand in problem set #work @@{09:00} @{2026-10-21}");
+  setCardDate(c, "2026-10-22");
+  assert.equal(c.title, "hand in problem set #work @@{09:00} @{2026-10-22}");
+  setCardDate(c, null);
+  assert.equal(c.title, "hand in problem set #work @@{09:00}");
 });
 
 test("changing settings rewrites only the settings block", () => {

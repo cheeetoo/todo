@@ -105,3 +105,5 @@ export class Plugin {}
 export class TFile {}
 export class WorkspaceLeaf {}
 export const normalizePath = (p: string) => p;
+export class Modal { app: unknown; constructor(app: unknown) { this.app = app; } open() {} close() {} }
+export class Setting { constructor(_el: unknown) {} }

@@ -7,6 +7,7 @@ import {
   Platform,
   Scope,
   TextFileView,
+  type TFile,
   moment,
   setIcon,
   type WorkspaceLeaf,
@@ -22,6 +23,7 @@ import {
   newCard,
   parseBoard,
   serializeBoard,
+  setCardDate,
   setCardText,
   setCardTime,
   toggleSubtask,
@@ -32,6 +34,7 @@ import {
   type TagColor,
 } from "./parser";
 import { resolveSettings, DEFAULTS, type Settings } from "./settings";
+import { BoardSettingsModal } from "./settingsModal";
 
 export const VIEW_TYPE = "todo-board";
 
@@ -125,6 +128,12 @@ export class BoardView extends TextFileView {
     this.initHeaderButtons();
   }
 
+  async onUnloadFile(file: TFile) {
+    // Commit an open edit before TextFileView's final save, not after it.
+    this.edit?.close(true);
+    return super.onUnloadFile(file);
+  }
+
   async onClose() {
     this.edit?.close(true);
     if (this.renderer) this.removeChild(this.renderer);
@@ -140,6 +149,13 @@ export class BoardView extends TextFileView {
             .setIcon("lucide-file-text")
             .setSection("pane")
             .onClick(() => this.plugin.openAsMarkdown(this.leaf)),
+        )
+        .addItem((item) =>
+          item
+            .setTitle("Open board settings")
+            .setIcon("lucide-settings")
+            .setSection("pane")
+            .onClick(() => this.openSettings()),
         )
         .addItem((item) =>
           item
@@ -163,7 +179,9 @@ export class BoardView extends TextFileView {
   private initHeaderButtons() {
     if (Platform.isPhone) return;
     this.headerButtons.forEach((b) => b.remove());
+    // addAction prepends, so these appear right to left, in obsidian-kanban's order.
     this.headerButtons = [
+      this.addAction("lucide-settings", "Open board settings", () => this.openSettings()),
       this.addAction("lucide-search", "Search...", () => this.openSearch()),
       this.addAction("lucide-file-text", "Open as markdown", () => this.plugin.openAsMarkdown(this.leaf)),
       this.addAction("lucide-archive", "Archive completed cards", () => this.archiveCompleted()),
@@ -173,6 +191,11 @@ export class BoardView extends TextFileView {
       }),
     ];
     this.headerButtons.at(-1)!.addClass(c("ignore-click-outside"));
+  }
+
+  openSettings() {
+    if (!this.board) return;
+    new BoardSettingsModal(this.app, this.settings, (patch) => this.mutate((board) => updateSettings(board, patch))).open();
   }
 
   // ------------------------------------------------------------ file plumbing
@@ -590,6 +613,10 @@ export class BoardView extends TextFileView {
         this.app.workspace.openLinkText(href, this.file?.path ?? "", Keymap.isModEvent(e));
         return;
       }
+      if (target.hasClass(c("item-metadata-date"))) {
+        this.dateMenu(e, wrapper, md, target.textContent ?? undefined);
+        return;
+      }
       if (target.hasClass(c("item-metadata-time"))) {
         const n = Array.from(preview.querySelectorAll(`.${c("item-metadata-time")}`)).indexOf(target);
         this.timePicker(e, wrapper, md, n, target.textContent ?? undefined);
@@ -847,8 +874,10 @@ export class BoardView extends TextFileView {
     const addBtn = actions.createEl("button", { cls: c("lane-action-add"), text: "Add list" });
     const doneBtn = actions.createEl("button", { cls: c("lane-action-cancel"), text: "Done" });
 
-    // The editor needs to be in the document, so mount it once the board is.
+    // The editor needs to be in the document, so mount it once the board is
+    // (and not at all if this draw was superseded by a newer one).
     this.afterRender.push(() => {
+      if (!form.isConnected) return;
       const create = (title: string) => {
         if (!title.trim()) return;
         this.mutate((board) => board.lanes.push({ title: title.trim(), complete, cards: [] }), false);
@@ -1053,6 +1082,21 @@ export class BoardView extends TextFileView {
       )
       .addSeparator();
 
+    const hasDate = display.dates.length > 0;
+    menu.addItem((item) =>
+      item
+        .setTitle(hasDate ? "Edit date" : "Add date")
+        .setIcon("lucide-calendar-check")
+        .onClick(() => this.dateMenu(e, wrapper, md, display.dates[0])),
+    );
+    if (hasDate) {
+      menu.addItem((item) =>
+        item
+          .setTitle("Remove date")
+          .setIcon("lucide-x")
+          .onClick(() => this.withCard(ref, md, (b, r) => setCardDate(this.cards(b, r.place)[r.index], null))),
+      );
+    }
     const hasTime = display.times.length > 0;
     menu.addItem((item) =>
       item
@@ -1139,6 +1183,33 @@ export class BoardView extends TextFileView {
       .addItem((item) => item.setIcon("lucide-archive").setTitle("Archive list").onClick(() => ask("archive")))
       .addItem((item) => item.setIcon("lucide-trash-2").setTitle("Delete list").onClick(() => ask("delete")))
       .showAtMouseEvent(e);
+  }
+
+  /** Pick a date for a card: the coming week, or remove it. */
+  private dateMenu(e: MouseEvent, wrapper: HTMLElement, md: string, current?: string) {
+    const ref = this.refOf(wrapper);
+    if (!ref) return;
+    const format = this.settings["date-format"];
+    const today = (moment as any)().startOf("day");
+    const set = (value: string | null) => this.withCard(ref, md, (b, r) => setCardDate(this.cards(b, r.place)[r.index], value));
+    const menu = new Menu();
+    for (let i = 0; i < 8; i++) {
+      const d = today.clone().add(i, "day");
+      const value = d.format(format);
+      const label = i === 0 ? "Today" : i === 1 ? "Tomorrow" : d.format("dddd");
+      menu.addItem((item) =>
+        item
+          .setTitle(`${label}  ·  ${d.format("MMM D")}`)
+          .setIcon("lucide-calendar")
+          .setChecked(value === current)
+          .onClick(() => set(value)),
+      );
+    }
+    if (current) {
+      menu.addSeparator();
+      menu.addItem((item) => item.setTitle("Remove date").setIcon("lucide-x").onClick(() => set(null)));
+    }
+    menu.showAtMouseEvent(e);
   }
 
   /** obsidian-kanban's time picker: a scrolling list of quarter hours. */

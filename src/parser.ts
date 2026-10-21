@@ -260,6 +260,21 @@ export function setCardTime(card: Card, index: number, value: string | null): vo
   setCardText(card, text.replace(/[ \t]+$/gm, ""));
 }
 
+/** Set (or with null, remove) the card's @{date}; a card has at most one. */
+export function setCardDate(card: Card, value: string | null): void {
+  let text = cardText(card);
+  let done = false;
+  text = text.replace(/(^|\s)@\{([^}]+)\}/, (_m, pre) => {
+    done = true;
+    return value === null ? "" : `${pre}@{${value}}`;
+  });
+  if (!done && value !== null) {
+    const [first, ...rest] = text.split("\n");
+    text = [`${first.replace(/\s+$/, "")} @{${value}}`, ...rest].join("\n");
+  }
+  setCardText(card, value === null ? text.replace(/[ \t]+$/gm, "") : text);
+}
+
 /** Tick or untick the nth "- [ ]" checklist line inside a card's continuation. */
 export function toggleSubtask(card: Card, n: number): boolean {
   let seen = 0;
