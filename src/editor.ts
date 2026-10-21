@@ -3,9 +3,19 @@
 // class, so it's pulled off a throwaway embed, the same way obsidian-kanban does.
 
 import { insertBlankLine } from "@codemirror/commands";
-import { EditorSelection, Prec, type Extension } from "@codemirror/state";
-import { EditorView, keymap, placeholder as placeholderExt, type ViewUpdate } from "@codemirror/view";
+import { EditorSelection, Prec, RangeSetBuilder, type Extension } from "@codemirror/state";
+import {
+  Decoration,
+  EditorView,
+  ViewPlugin,
+  WidgetType,
+  keymap,
+  placeholder as placeholderExt,
+  type DecorationSet,
+  type ViewUpdate,
+} from "@codemirror/view";
 import { Platform, type App } from "obsidian";
+import { normTime } from "./parser";
 import type { BoardView } from "./view";
 
 let MarkdownEditorClass: any = null;
@@ -71,6 +81,75 @@ function vimWantsEscape(cm: EditorView): boolean {
 function enterInsertMode(cm: EditorView) {
   const adapter = vimOf(cm);
   if (adapter) (window as any).CodeMirrorAdapter?.Vim?.enterInsertMode(adapter);
+}
+
+// ---- Times and dates as chips while editing ----
+
+class ChipWidget extends WidgetType {
+  text: string;
+  kind: "time" | "date";
+
+  constructor(text: string, kind: "time" | "date") {
+    super();
+    this.text = text;
+    this.kind = kind;
+  }
+
+  eq(other: ChipWidget) {
+    return other.text === this.text && other.kind === this.kind;
+  }
+
+  toDOM() {
+    // obsidian-kanban's editor chip classes, so its stylesheet draws them.
+    const wrap = createSpan({ cls: `cm-kanban-${this.kind}-wrapper` });
+    wrap.createSpan({ cls: `cm-kanban-${this.kind}`, text: this.text });
+    return wrap;
+  }
+
+  ignoreEvent() {
+    return false;
+  }
+}
+
+const TOKEN_RE = /(@@|@)\{([^}\n]+)\}/g;
+
+/**
+ * A finished @@{21:30} or @{2026-10-21} shows as a chip. With the cursor
+ * inside it, it's plain text again so it can be edited (as live preview does
+ * with links and formatting).
+ */
+function chips(): Extension {
+  const build = (view: EditorView): DecorationSet => {
+    const out = new RangeSetBuilder<Decoration>();
+    const sel = view.state.selection.ranges;
+    for (const { from, to } of view.visibleRanges) {
+      const text = view.state.doc.sliceString(from, to);
+      for (const m of text.matchAll(TOKEN_RE)) {
+        const start = from + m.index!;
+        const end = start + m[0].length;
+        if (m[1] === "@" && start > 0 && view.state.doc.sliceString(start - 1, start) === "@") continue;
+        const kind = m[1] === "@@" ? "time" : "date";
+        const value = kind === "time" ? normTime(m[2]) : /^\d{4}-\d{2}-\d{2}$/.test(m[2]) ? m[2] : null;
+        if (!value) continue;
+        if (sel.some((r) => r.from < end && r.to > start)) continue;
+        out.add(start, end, Decoration.replace({ widget: new ChipWidget(value, kind) }));
+      }
+    }
+    return out.finish();
+  };
+
+  return ViewPlugin.fromClass(
+    class {
+      decorations: DecorationSet;
+      constructor(view: EditorView) {
+        this.decorations = build(view);
+      }
+      update(u: ViewUpdate) {
+        if (u.docChanged || u.selectionSet || u.viewportChanged) this.decorations = build(u.view);
+      }
+    },
+    { decorations: (v) => v.decorations },
+  );
 }
 
 /** Hide line numbers and folding inside cards, whatever the vault uses for notes. */
@@ -152,6 +231,7 @@ export function mountEditor(view: BoardView, parent: HTMLElement, opts: EditorOp
         ),
       );
 
+      extensions.push(chips());
       if (opts.placeholder) extensions.push(placeholderExt(opts.placeholder));
 
       const enter = (mod: boolean, shift: boolean) => (cm: EditorView) => {

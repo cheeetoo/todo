@@ -212,7 +212,7 @@ export class DragController {
   private lanes(): HTMLElement[] {
     const root = this.host.root();
     if (!root) return [];
-    return Array.from(root.querySelectorAll<HTMLElement>(`.kanban-plugin__board ${LANE}:not(.tb-archive-lane)`));
+    return Array.from(root.querySelectorAll<HTMLElement>(`.kanban-plugin__board ${LANE}`));
   }
 
   /** Work out where the pointer is aiming and move the placeholder there. */

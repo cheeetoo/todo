@@ -41,18 +41,19 @@ export const VIEW_TYPE = "todo-board";
 /** obsidian-kanban's class names, so its stylesheet (and any theme styling it) applies as-is. */
 const c = (cls: string) => `kanban-plugin__${cls}`;
 
-/** Where a card lives: a lane index, or "archive". */
-type Place = number | "archive";
+/**
+ * Where a card lives: lane index and position. The file may still hold an
+ * obsidian-kanban archive section; it's kept as-is but never shown or searched.
+ */
 export interface CardRef {
-  place: Place;
+  place: number;
   index: number;
 }
 
-type LaneAction = "archive-items" | "archive" | "delete";
+type LaneAction = "clear" | "delete";
 const CONFIRM: Record<LaneAction, { text: string; button: string }> = {
   delete: { text: "Are you sure you want to delete this list and all its cards?", button: "Yes, delete list" },
-  archive: { text: "Are you sure you want to archive this list and all its cards?", button: "Yes, archive list" },
-  "archive-items": { text: "Are you sure you want to archive all cards in this list?", button: "Yes, archive cards" },
+  clear: { text: "Are you sure you want to delete all cards in this list?", button: "Yes, delete cards" },
 };
 
 const HISTORY_LIMIT = 100;
@@ -82,7 +83,6 @@ export class BoardView extends TextFileView {
   private afterRender: Array<() => void> = [];
   private edit: EditSession | null = null;
   private searchQuery: string | null = null;
-  private showArchive = false;
   private laneFormOpen = false;
   private confirm: { lane: number; action: LaneAction } | null = null;
   private headerButtons: HTMLElement[] = [];
@@ -159,17 +159,10 @@ export class BoardView extends TextFileView {
         )
         .addItem((item) =>
           item
-            .setTitle("Archive completed cards")
+            .setTitle("Clear completed cards")
             .setIcon("lucide-archive")
             .setSection("pane")
-            .onClick(() => this.archiveCompleted()),
-        )
-        .addItem((item) =>
-          item
-            .setTitle(this.showArchive ? "Hide archive" : "Show archive")
-            .setIcon("lucide-library")
-            .setSection("pane")
-            .onClick(() => this.toggleArchive()),
+            .onClick(() => this.clearCompleted()),
         );
     }
     super.onPaneMenu(menu, source);
@@ -184,7 +177,7 @@ export class BoardView extends TextFileView {
       this.addAction("lucide-settings", "Open board settings", () => this.openSettings()),
       this.addAction("lucide-search", "Search...", () => this.openSearch()),
       this.addAction("lucide-file-text", "Open as markdown", () => this.plugin.openAsMarkdown(this.leaf)),
-      this.addAction("lucide-archive", "Archive completed cards", () => this.archiveCompleted()),
+      this.addAction("lucide-archive", "Clear completed cards", () => this.clearCompleted()),
       this.addAction("lucide-plus-circle", "Add a list", () => {
         this.laneFormOpen = true;
         this.render();
@@ -209,7 +202,6 @@ export class BoardView extends TextFileView {
     if (clear || data !== this.data) this.history = [];
     if (clear) {
       this.searchQuery = null;
-      this.showArchive = false;
       this.laneFormOpen = false;
       this.confirm = null;
     }
@@ -263,8 +255,7 @@ export class BoardView extends TextFileView {
 
   // ------------------------------------------------------------ finding cards
 
-  private cards(board: Board, place: Place): Card[] {
-    if (place === "archive") return (board.archive ??= []);
+  private cards(board: Board, place: number): Card[] {
     return board.lanes[place]?.cards ?? [];
   }
 
@@ -276,7 +267,7 @@ export class BoardView extends TextFileView {
     const board = this.board;
     if (!board) return null;
     if (cardToMd(this.cards(board, ref.place)[ref.index] ?? { check: null, title: "\0", rest: [] }) === md) return ref;
-    const places: Place[] = [ref.place, ...board.lanes.map((_, i) => i).filter((i) => i !== ref.place), "archive"];
+    const places = [ref.place, ...board.lanes.map((_, i) => i).filter((i) => i !== ref.place)];
     for (const place of places) {
       const index = this.cards(board, place).findIndex((card) => cardToMd(card) === md);
       if (index !== -1) return { place, index };
@@ -295,16 +286,16 @@ export class BoardView extends TextFileView {
   }
 
   /** Completion follows the lane, as in obsidian-kanban: into a Complete lane ticks, out of one unticks. */
-  private settle(card: Card, from: Lane | null, to: Lane) {
+  private settle(card: Card, from: Lane, to: Lane) {
     if (card.check === null) return;
     if (to.complete) card.check = "x";
-    else if ((from === null || from.complete) && card.check === "x") card.check = " ";
+    else if (from.complete && card.check === "x") card.check = " ";
   }
 
   moveCard(from: CardRef, md: string, toLane: number, toIndex: number) {
     this.withCard(from, md, (board, ref) => {
       const [card] = this.cards(board, ref.place).splice(ref.index, 1);
-      const fromLane = ref.place === "archive" ? null : board.lanes[ref.place];
+      const fromLane = board.lanes[ref.place];
       const target = board.lanes[toLane];
       this.settle(card, fromLane, target);
       target.cards.splice(Math.min(toIndex, target.cards.length), 0, card);
@@ -328,17 +319,10 @@ export class BoardView extends TextFileView {
     return board.lanes.map((_, i) => !!cur[i]);
   }
 
-  archiveCompleted() {
+  /** Delete what's done: every card in a Complete lane, and any ticked card. */
+  clearCompleted() {
     this.mutate((board) => {
-      const archived: Card[] = [];
-      for (const lane of board.lanes) {
-        lane.cards = lane.cards.filter((card) => {
-          const done = lane.complete || card.check === "x";
-          if (done) archived.push(card);
-          return !done;
-        });
-      }
-      (board.archive ??= []).push(...archived);
+      for (const lane of board.lanes) lane.cards = lane.cards.filter((card) => !lane.complete && card.check !== "x");
     });
   }
 
@@ -422,7 +406,6 @@ export class BoardView extends TextFileView {
     const inner = boardEl.createDiv();
     const collapse = this.collapseState(board);
     board.lanes.forEach((lane, i) => this.renderLane(inner, lane, i, collapse[i], renderer, jobs));
-    if (this.showArchive) this.renderArchive(inner, board.archive ?? [], renderer, jobs);
     inner.createDiv({ cls: `${c("placeholder")} ${c("lane-placeholder")}`, attr: { "data-axis": "horizontal" } });
   }
 
@@ -482,32 +465,6 @@ export class BoardView extends TextFileView {
     this.dnd.bind(grip, wrapper, "lane");
   }
 
-  private renderArchive(parent: HTMLElement, archive: Card[], renderer: Component, jobs: Promise<unknown>[]) {
-    const wrapper = parent.createDiv(`${c("lane-wrapper")} tb-archive-lane`);
-    const laneEl = wrapper.createDiv({ cls: c("lane"), attr: { "data-count": String(archive.length) } });
-    const header = laneEl.createDiv(c("lane-header-wrapper"));
-    const title = header.createDiv(c("lane-title")).createDiv(c("lane-title-text"));
-    this.markdown(title, `Archive (${archive.length})`, renderer, jobs);
-    const buttons = header.createDiv(c("lane-settings-button-wrapper"));
-    const close = buttons.createEl("a", { cls: `${c("lane-settings-button")} clickable-icon`, attr: { "aria-label": "Hide archive" } });
-    icon(close, "lucide-x");
-    close.onclick = () => this.toggleArchive();
-    const items = laneEl.createDiv(`${c("lane-items")} ${c("vertical")} ${c("scroll-container")}`);
-    archive.forEach((card) => this.renderCard(items, card, null, renderer, jobs));
-    items.createDiv({ cls: c("placeholder"), attr: { "data-axis": "vertical" } });
-  }
-
-  private toggleArchive() {
-    this.showArchive = !this.showArchive;
-    if (this.showArchive) {
-      this.afterRender.push(() => {
-        const board = this.rootEl()?.querySelector(`.${c("board")}`);
-        board?.scrollTo({ left: board.scrollWidth, behavior: "smooth" });
-      });
-    }
-    this.render();
-  }
-
   private toggleCollapse(laneIndex: number) {
     this.mutate((board) => {
       const collapse = this.collapseState(board);
@@ -521,12 +478,11 @@ export class BoardView extends TextFileView {
     const laneWrapper = itemWrapper.closest<HTMLElement>(`.${c("lane-wrapper")}`);
     if (!laneWrapper) return null;
     const index = Array.from(itemWrapper.parentElement!.querySelectorAll(`:scope > .${c("item-wrapper")}`)).indexOf(itemWrapper);
-    if (laneWrapper.hasClass("tb-archive-lane")) return { place: "archive", index };
-    const lanes = Array.from(this.contentEl.querySelectorAll(`.${c("lane-wrapper")}:not(.tb-archive-lane)`));
+    const lanes = Array.from(this.contentEl.querySelectorAll(`.${c("lane-wrapper")}`));
     return { place: lanes.indexOf(laneWrapper), index };
   }
 
-  private renderCard(items: HTMLElement, card: Card, lane: Lane | null, renderer: Component, jobs: Promise<unknown>[], before?: Element | null) {
+  private renderCard(items: HTMLElement, card: Card, lane: Lane, renderer: Component, jobs: Promise<unknown>[], before?: Element | null) {
     const md = cardToMd(card);
     const display = cardDisplay(card, { moveTags: this.settings["move-tags"] });
 
@@ -546,7 +502,8 @@ export class BoardView extends TextFileView {
     const content = item.createDiv(c("item-content-wrapper"));
     const titleWrapper = content.createDiv(c("item-title-wrapper"));
 
-    // Prefix: a checkbox when show-checkboxes is on, otherwise an archive button in Complete lanes.
+    // Prefix: a checkbox when show-checkboxes is on, otherwise (in Complete lanes)
+    // obsidian-kanban's archive button, which here clears the card away.
     if (this.settings["show-checkboxes"] && card.check !== null) {
       const prefix = titleWrapper.createDiv(c("item-prefix-button-wrapper"));
       const box = prefix.createEl("input", { type: "checkbox", cls: "task-list-item-checkbox" });
@@ -559,11 +516,11 @@ export class BoardView extends TextFileView {
           target.check = target.check === " " ? "x" : " ";
         });
       };
-    } else if (lane?.complete) {
+    } else if (lane.complete) {
       const prefix = titleWrapper.createDiv(c("item-prefix-button-wrapper"));
-      const btn = prefix.createEl("a", { cls: `${c("item-prefix-button")} clickable-icon`, attr: { "aria-label": "Archive card" } });
+      const btn = prefix.createEl("a", { cls: `${c("item-prefix-button")} clickable-icon`, attr: { "aria-label": "Clear card" } });
       icon(btn, "sheets-in-box");
-      btn.onclick = () => this.archiveCard(this.refOf(wrapper)!, md);
+      btn.onclick = () => this.deleteCard(this.refOf(wrapper)!, md);
     }
 
     const title = titleWrapper.createDiv(c("item-title"));
@@ -647,7 +604,7 @@ export class BoardView extends TextFileView {
       this.cardMenu(e, wrapper, card, md);
     });
 
-    if (lane) this.dnd.bind(wrapper, wrapper, "card");
+    this.dnd.bind(wrapper, wrapper, "card");
     return wrapper;
   }
 
@@ -678,8 +635,7 @@ export class BoardView extends TextFileView {
   private runLaneAction(laneIndex: number, action: LaneAction) {
     this.mutate((board) => {
       const lane = board.lanes[laneIndex];
-      if (action === "archive-items" || action === "archive") (board.archive ??= []).unshift(...lane.cards);
-      if (action === "archive-items") lane.cards = [];
+      if (action === "clear") lane.cards = [];
       else {
         board.lanes.splice(laneIndex, 1);
         const collapse = this.collapseState(board);
@@ -778,7 +734,7 @@ export class BoardView extends TextFileView {
   }
 
   private openAddForm(laneIndex: number) {
-    const laneEl = this.contentEl.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")}:not(.tb-archive-lane) .${c("lane")}`)[laneIndex];
+    const laneEl = this.contentEl.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")} .${c("lane")}`)[laneIndex];
     const buttonWrap = laneEl?.querySelector<HTMLElement>(`:scope > .${c("item-button-wrapper")}`);
     if (!laneEl || !buttonWrap) return;
 
@@ -974,11 +930,8 @@ export class BoardView extends TextFileView {
 
   // ------------------------------------------------------------ menus
 
-  private archiveCard(ref: CardRef, md: string) {
-    this.withCard(ref, md, (board, r) => {
-      const [card] = this.cards(board, r.place).splice(r.index, 1);
-      (board.archive ??= []).push(card);
-    });
+  private deleteCard(ref: CardRef, md: string) {
+    this.withCard(ref, md, (board, r) => this.cards(board, r.place).splice(r.index, 1));
   }
 
   private cardMenu(e: MouseEvent, wrapper: HTMLElement, card: Card, md: string) {
@@ -987,26 +940,6 @@ export class BoardView extends TextFileView {
     if (!ref || !board) return;
     const menu = new Menu();
     const display = cardDisplay(card);
-
-    if (ref.place === "archive") {
-      board.lanes.forEach((lane, i) =>
-        menu.addItem((item) =>
-          item
-            .setTitle(`Restore to ${lane.title}`)
-            .setIcon("lucide-undo-2")
-            .onClick(() => this.moveCard(ref, md, i, 0)),
-        ),
-      );
-      menu.addSeparator();
-      menu.addItem((item) =>
-        item
-          .setTitle("Delete card")
-          .setIcon("lucide-trash-2")
-          .onClick(() => this.withCard(ref, md, (b, r) => this.cards(b, r.place).splice(r.index, 1))),
-      );
-      menu.showAtMouseEvent(e);
-      return;
-    }
 
     const laneIndex = ref.place;
     const insertAt = (offset: number) => {
@@ -1070,15 +1003,9 @@ export class BoardView extends TextFileView {
       )
       .addItem((item) =>
         item
-          .setTitle("Archive card")
-          .setIcon("lucide-archive")
-          .onClick(() => this.archiveCard(ref, md)),
-      )
-      .addItem((item) =>
-        item
           .setTitle("Delete card")
           .setIcon("lucide-trash-2")
-          .onClick(() => this.withCard(ref, md, (b, r) => this.cards(b, r.place).splice(r.index, 1))),
+          .onClick(() => this.deleteCard(ref, md)),
       )
       .addSeparator();
 
@@ -1140,7 +1067,7 @@ export class BoardView extends TextFileView {
   }
 
   private editCardAt(laneIndex: number, index: number) {
-    const lane = this.contentEl.querySelectorAll(`.${c("lane-wrapper")}:not(.tb-archive-lane)`)[laneIndex];
+    const lane = this.contentEl.querySelectorAll(`.${c("lane-wrapper")}`)[laneIndex];
     const wrapper = lane?.querySelectorAll<HTMLElement>(`.${c("item-wrapper")}`)[index];
     const card = this.board?.lanes[laneIndex]?.cards[index];
     if (wrapper && card) this.editCard(wrapper, card, cardToMd(card));
@@ -1154,7 +1081,7 @@ export class BoardView extends TextFileView {
     };
     const insertLane = (at: number) => {
       this.afterRender.push(() => {
-        const titleEl = this.contentEl.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")}:not(.tb-archive-lane) .${c("lane-title")}`)[at];
+        const titleEl = this.contentEl.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")} .${c("lane-title")}`)[at];
         if (titleEl) this.editLaneTitle(titleEl, at, "");
       });
       this.mutate((board) => {
@@ -1171,16 +1098,15 @@ export class BoardView extends TextFileView {
           .setIcon("lucide-edit-3")
           .setTitle("Edit list")
           .onClick(() => {
-            const titleEl = this.contentEl.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")}:not(.tb-archive-lane) .${c("lane-title")}`)[laneIndex];
+            const titleEl = this.contentEl.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")} .${c("lane-title")}`)[laneIndex];
             if (titleEl) this.editLaneTitle(titleEl, laneIndex, this.board!.lanes[laneIndex].title);
           }),
       )
-      .addItem((item) => item.setIcon("lucide-archive").setTitle("Archive cards").onClick(() => ask("archive-items")))
+      .addItem((item) => item.setIcon("lucide-archive").setTitle("Clear cards").onClick(() => ask("clear")))
       .addSeparator()
       .addItem((item) => item.setIcon("arrow-left-to-line").setTitle("Insert list before").onClick(() => insertLane(laneIndex)))
       .addItem((item) => item.setIcon("arrow-right-to-line").setTitle("Insert list after").onClick(() => insertLane(laneIndex + 1)))
       .addSeparator()
-      .addItem((item) => item.setIcon("lucide-archive").setTitle("Archive list").onClick(() => ask("archive")))
       .addItem((item) => item.setIcon("lucide-trash-2").setTitle("Delete list").onClick(() => ask("delete")))
       .showAtMouseEvent(e);
   }
@@ -1274,7 +1200,7 @@ export class BoardView extends TextFileView {
   private onDrop(r: DropResult) {
     if (!r.el.isConnected) return;
     if (r.kind === "lane") {
-      const lanes = Array.from(this.contentEl.querySelectorAll(`.${c("lane-wrapper")}:not(.tb-archive-lane)`));
+      const lanes = Array.from(this.contentEl.querySelectorAll(`.${c("lane-wrapper")}`));
       const from = lanes.indexOf(r.el);
       if (from !== -1) this.moveLane(from, r.index);
       return;

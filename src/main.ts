@@ -44,12 +44,12 @@ export default class TodoBoardPlugin extends Plugin {
     });
 
     this.addCommand({
-      id: "archive-completed",
-      name: "Archive completed cards",
+      id: "clear-completed",
+      name: "Clear completed cards",
       checkCallback: (checking) => {
         const view = this.app.workspace.getActiveViewOfType(BoardView);
         if (!view) return false;
-        if (!checking) view.archiveCompleted();
+        if (!checking) view.clearCompleted();
         return true;
       },
     });

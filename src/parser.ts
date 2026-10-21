@@ -201,7 +201,7 @@ export interface CardDisplay {
 
 const KB = "kanban-plugin__";
 
-function normTime(t: string): string | null {
+export function normTime(t: string): string | null {
   const m = t.trim().match(/^(\d{1,2}):(\d{2})$/);
   if (!m || +m[1] > 23 || +m[2] > 59) return null;
   return m[1].padStart(2, "0") + ":" + m[2];

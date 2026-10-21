@@ -28,7 +28,7 @@ test("renders obsidian-kanban's DOM, and opening writes nothing", async () => {
 
   const done = cardsIn(lanes[4])[0];
   assert.ok(done.querySelector(".kanban-plugin__item.is-complete.has-tag-sailing"));
-  assert.ok(done.querySelector(".kanban-plugin__item-prefix-button[aria-label='Archive card']"), "Complete lanes show the archive button");
+  assert.ok(done.querySelector(".kanban-plugin__item-prefix-button[aria-label='Clear card']"), "Complete lanes show the clear button");
   const tag = done.querySelector(".kanban-plugin__item-tags a.tag.kanban-plugin__item-tag");
   assert.equal(tag.textContent, "#sailing");
   assert.equal(tag.style.getPropertyValue("--tag-background"), "rgba(89, 122, 182, 1)");
@@ -73,23 +73,29 @@ test("a card is found by its text if the file shifted underneath", async () => {
   assert.equal(l[2].cards[0].title, "new from phone");
 });
 
-test("the Done lane's archive button archives to the end, like obsidian-kanban", async () => {
+test("the Done lane's button clears a card away for good", async () => {
   const v = await open();
   const first = cardsIn(lanesEl(v)[4])[0];
-  const title = lanesOf(v)[4].cards[0].title;
   first.querySelector(".kanban-plugin__item-prefix-button").click();
   const b = parseBoard(v.getViewData());
-  assert.equal(b.archive!.at(-1)!.title, title);
   assert.equal(b.lanes[4].cards.length, 4);
+  assert.equal(b.archive!.length, parseBoard(fixture).archive!.length, "nothing is added to the archive");
 });
 
-test("archive completed cards takes everything from Complete lanes", async () => {
+test("clear completed deletes the Done lane; the old archive section is left as it was", async () => {
   const v = await open();
-  const before = parseBoard(fixture).archive!.length;
-  v.archiveCompleted();
-  const b = parseBoard(v.getViewData());
+  v.clearCompleted();
+  const out = v.getViewData();
+  const b = parseBoard(out);
   assert.equal(b.lanes[4].cards.length, 0);
-  assert.equal(b.archive!.length, before + 5);
+  assert.equal(out.slice(out.indexOf("***")), fixture.slice(fixture.indexOf("***")));
+});
+
+test("a card that's gone isn't hunted down in the old archive", async () => {
+  const v = await open();
+  // "eat food" exists only in the archive; a stale ref to it must not delete it there.
+  v.deleteCard({ place: 2, index: 0 }, "- [x] eat food");
+  assert.equal(v.getViewData(), fixture);
 });
 
 test("collapsing and reordering lanes keeps list-collapse in step", async () => {
@@ -111,7 +117,7 @@ test("the card menu offers obsidian-kanban's actions", async () => {
   const wrapper = cardsIn(lanesEl(v)[2])[0];
   wrapper.querySelector(".kanban-plugin__item-postfix-button").click();
   const titles = g.lastMenu.items.map((i: any) => i.title);
-  for (const t of ["Edit card", "Duplicate card", "Insert card before", "Insert card after", "Move to top", "Move to bottom", "Archive card", "Delete card", "Move to list"])
+  for (const t of ["Edit card", "Duplicate card", "Insert card before", "Insert card after", "Move to top", "Move to bottom", "Delete card", "Move to list"])
     assert.ok(titles.includes(t), `menu has ${t}: ${titles}`);
   g.lastMenu.items.find((i: any) => i.title === "Move to list").submenu.items.find((i: any) => i.title === "WiP").click();
   assert.equal(lanesOf(v)[3].cards[0].title, "de-pangram #work");
@@ -140,7 +146,7 @@ test("an unreadable file shows an error and is never rewritten", async () => {
   const bad = "---\n\nkanban-plugin: board\n\n---\n\n## A\n\nstray paragraph\n";
   const v = await open(bad);
   assert.ok(v.contentEl.querySelector(".tb-error"));
-  v.archiveCompleted();
+  v.clearCompleted();
   assert.equal(v.getViewData(), bad);
   assert.equal(v.saves, 0);
 });

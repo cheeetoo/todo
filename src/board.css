@@ -82,11 +82,6 @@ body.tb-is-dragging * {
   font-size: var(--font-ui-small);
 }
 
-/* Archive (shown from the "…" menu) */
-.tb-archive-lane .kanban-plugin__lane {
-  opacity: 0.9;
-}
-
 .tb-error {
   max-width: 34rem;
   margin: 3rem auto;
