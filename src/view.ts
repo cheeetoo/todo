@@ -14,6 +14,7 @@ import {
 } from "obsidian";
 import { DragController, type DropResult } from "./dnd";
 import { allowNewLine, mountEditor, type MountedEditor } from "./editor";
+import { KeysModal } from "./keys";
 import type TodoBoardPlugin from "./main";
 import {
   BoardParseError,
@@ -59,6 +60,28 @@ const CONFIRM: Record<LaneAction, { text: string; button: string }> = {
 const HISTORY_LIMIT = 100;
 const GRIP_PATH = "M5 3h2v2H5zm0 4h2v2H5zm0 4h2v2H5zm4-8h2v2H9zm0 4h2v2H9zm0 4h2v2H9z";
 
+/** Where the keyboard is: a lane and a card in it (index -1 in a lane with no cards). */
+interface Cursor {
+  lane: number;
+  index: number;
+}
+
+type Direction = "up" | "down" | "left" | "right";
+const DIRECTIONS: Record<string, Direction> = {
+  j: "down",
+  arrowdown: "down",
+  k: "up",
+  arrowup: "up",
+  h: "left",
+  arrowleft: "left",
+  l: "right",
+  arrowright: "right",
+};
+/** The list the keys start in, by title. */
+const DEFAULT_LANE = "today";
+/** How long "g" or "d" waits for its second press. */
+const CHORD_MS = 1000;
+
 /** An open editor: a card, a lane title, or one of the add forms. */
 interface EditSession {
   el: HTMLElement;
@@ -84,6 +107,10 @@ export class BoardView extends TextFileView {
   private focusSearch = false;
   private laneFormOpen = false;
   private confirm: { lane: number; action: LaneAction } | null = null;
+  /** The card the keyboard is on; kept in step with the board, and redrawn after every render. */
+  private cursor: Cursor | null = null;
+  /** The first key of a two-key command (gg, dd), waiting for its second. */
+  private chord: { key: string; timer: ReturnType<typeof setTimeout> } | null = null;
 
   constructor(leaf: WorkspaceLeaf, plugin: TodoBoardPlugin) {
     super(leaf);
@@ -113,6 +140,16 @@ export class BoardView extends TextFileView {
 
   async onOpen() {
     this.registerDomEvent(this.containerEl.doc, "pointerdown", (e) => this.onPointerDownAnywhere(e), true);
+    this.registerDomEvent(
+      this.containerEl.doc,
+      "keydown",
+      (e) => {
+        if (this.app.workspace.getActiveViewOfType(BoardView) !== this || !this.onKey(e)) return;
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      true,
+    );
     // obsidian-kanban's header buttons, which it leaves off on phones. addAction
     // prepends, so these appear right to left.
     if (Platform.isPhone) return;
@@ -167,6 +204,7 @@ export class BoardView extends TextFileView {
       this.searchQuery = null;
       this.laneFormOpen = false;
       this.confirm = null;
+      this.cursor = null;
     }
     this.data = data;
     this.parse(data);
@@ -178,6 +216,7 @@ export class BoardView extends TextFileView {
     this.board = null;
     this.error = null;
     this.history = [];
+    this.cursor = null;
   }
 
   private parse(data: string) {
@@ -339,6 +378,7 @@ export class BoardView extends TextFileView {
     this.contentEl.empty();
     this.contentEl.appendChild(root);
     this.restoreScroll(scroll);
+    this.paintCursor();
 
     if (this.searchQuery !== null) this.applySearch();
     if (this.focusSearch) root.querySelector<HTMLInputElement>(`.${c("filter-input")}`)?.focus();
@@ -549,6 +589,13 @@ export class BoardView extends TextFileView {
   /** Clicking outside an open editor commits it (menus, suggestions and pickers excepted). */
   private onPointerDownAnywhere(e: PointerEvent) {
     const t = e.target as HTMLElement;
+    // Clicking a card puts the keyboard on it.
+    const clicked = t.closest?.<HTMLElement>(`.${c("item-wrapper")}`);
+    if (clicked && this.contentEl.contains(clicked) && !this.dnd.active) {
+      const ref = this.refOf(clicked);
+      this.cursor = { lane: ref.place, index: ref.index };
+      this.paintCursor(false);
+    }
     if (!this.edit || this.edit.el.contains(t)) return;
     if (t.closest(`.suggestion-container, .menu, .mobile-toolbar, .modal-container, .${c("ignore-click-outside")}`)) return;
     this.edit.close(true);
@@ -587,6 +634,7 @@ export class BoardView extends TextFileView {
 
   editCard(wrapper: HTMLElement, card: Card, md: string, cursorAt?: { x: number; y: number }) {
     const ref = this.refOf(wrapper);
+    this.cursor = { lane: ref.place, index: ref.index };
     const titleWrapper = wrapper.querySelector<HTMLElement>(`.${c("item-title-wrapper")}`)!;
     const postfix = titleWrapper.querySelector<HTMLElement>(`.${c("item-postfix-button-wrapper")}`)!;
     wrapper.addClass("is-editing");
@@ -632,6 +680,8 @@ export class BoardView extends TextFileView {
       this.renderCard(items, lane.cards[lane.cards.length - 1], lane, this.renderer ?? this.addChild(new Component()), []);
       laneEl.dataset.count = String(lane.cards.length);
       items.scrollTop = items.scrollHeight;
+      this.cursor = { lane: laneIndex, index: lane.cards.length - 1 };
+      this.paintCursor(false);
       editor.setValue("");
     };
 
@@ -711,7 +761,18 @@ export class BoardView extends TextFileView {
       this.searchQuery = null;
       this.render();
     };
-    input.addEventListener("keydown", (e) => e.key === "Escape" && (e.preventDefault(), close()));
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        close();
+      } else if (e.key === "Enter") {
+        // Done typing: land on the first match so j/k carry on from there.
+        e.preventDefault();
+        input.blur();
+        this.cursor = null;
+        this.startCursor();
+      }
+    });
     const cancel = wrap.createEl("a", { cls: `${c("search-cancel-button")} clickable-icon`, attr: { "aria-label": "Cancel" } });
     icon(cancel, "lucide-x");
     cancel.onclick = close;
@@ -732,6 +793,203 @@ export class BoardView extends TextFileView {
       }
       laneWrapper.toggleClass("collapse-horizontal", laneWrapper.dataset.collapsed === "true" || (!!q && !any));
     }
+  }
+
+  // ------------------------------------------------------------ keyboard
+
+  /**
+   * vim-style keys for the board. Returns whether the key was used. Nothing
+   * happens while typing in an editor or the search box, or with a menu or
+   * dialog open.
+   */
+  onKey(e: KeyboardEvent): boolean {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return false;
+    if (!this.board || this.edit || this.dnd.active || isTyping(e)) return false;
+    if (this.containerEl.doc.querySelector(`.modal-container, .menu, .${c("time-picker")}`)) return false;
+    const pending = this.chord?.key;
+    this.clearChord();
+    this.clampCursor();
+
+    const key = e.key;
+    const dir = DIRECTIONS[key.toLowerCase()];
+    if (dir) {
+      // Capital letters (by case, so Caps Lock agrees) and Shift+arrows move the card.
+      if (key.length === 1 ? key !== key.toLowerCase() : e.shiftKey) this.moveSelected(dir);
+      else this.select(dir);
+    } else if (key === "g") {
+      if (pending === "g") this.select("top");
+      else this.armChord(key);
+    } else if (key === "G") this.select("bottom");
+    else if (key === "d") {
+      if (pending === "d") this.deleteSelected();
+      else this.armChord(key);
+    } else if (key === "Enter" || key === "e") {
+      if (!this.editSelected()) return false;
+    } else if (key === "a") {
+      if (!this.addToSelectedLane()) return false;
+    } else if (key === "u") this.undo();
+    else if (key === "/") this.openSearch();
+    else if (key === "?") new KeysModal(this.app).open();
+    else if (key === "Escape" && this.cursor) {
+      this.cursor = null;
+      this.paintCursor();
+    } else return false;
+    return true;
+  }
+
+  private armChord(key: string) {
+    this.chord = { key, timer: setTimeout(() => this.clearChord(), CHORD_MS) };
+  }
+
+  private clearChord() {
+    if (this.chord) clearTimeout(this.chord.timer);
+    this.chord = null;
+  }
+
+  private searchTerm(): string {
+    return (this.searchQuery ?? "").trim().toLowerCase();
+  }
+
+  /** Whether a lane is on screen: not collapsed, and (while searching) holding a match. */
+  private laneShown(lane: number): boolean {
+    const board = this.board!;
+    if (this.collapsed(board)[lane]) return false;
+    return !this.searchTerm() || this.shownCards(lane).length > 0;
+  }
+
+  /** The positions of a lane's cards that are on screen (search hides the rest). */
+  private shownCards(lane: number): number[] {
+    const q = this.searchTerm();
+    const out: number[] = [];
+    this.cards(this.board!, lane).forEach((card, i) => {
+      if (!q || cardToMd(card).toLowerCase().includes(q)) out.push(i);
+    });
+    return out;
+  }
+
+  /** The nearest lane in a direction that's on screen. */
+  private neighbourLane(lane: number, step: 1 | -1): number | null {
+    for (let i = lane + step; i >= 0 && i < this.board!.lanes.length; i += step) if (this.laneShown(i)) return i;
+    return null;
+  }
+
+  /** The on-screen card closest to a position, or -1 if the lane shows none. */
+  private nearestShown(lane: number, index: number): number {
+    let best = -1;
+    for (const i of this.shownCards(lane)) if (best === -1 || Math.abs(i - index) < Math.abs(best - index)) best = i;
+    return best;
+  }
+
+  /** Keep the cursor on a card (or an empty lane) that exists. */
+  private clampCursor() {
+    const cur = this.cursor;
+    if (!cur) return;
+    const lanes = this.board?.lanes;
+    if (!lanes?.length) {
+      this.cursor = null;
+      return;
+    }
+    cur.lane = Math.min(cur.lane, lanes.length - 1);
+    const count = lanes[cur.lane].cards.length;
+    cur.index = count ? Math.max(0, Math.min(cur.index, count - 1)) : -1;
+  }
+
+  /** Where the keys act before any card is selected: the Today list, else the first one on screen. */
+  private defaultLane(): number {
+    const lanes = this.board?.lanes ?? [];
+    const today = lanes.findIndex((lane, i) => lane.title.trim().toLowerCase() === DEFAULT_LANE && this.laneShown(i));
+    return today !== -1 ? today : lanes.findIndex((_, i) => this.laneShown(i));
+  }
+
+  /** The first press of any movement key just lands on the default list's first card. */
+  private startCursor() {
+    const lane = this.defaultLane();
+    if (lane === -1) return;
+    this.cursor = { lane, index: this.nearestShown(lane, 0) };
+    this.paintCursor();
+  }
+
+  private select(dir: Direction | "top" | "bottom") {
+    if (!this.cursor) return this.startCursor();
+    const { lane, index } = this.cursor;
+    if (dir === "left" || dir === "right") {
+      const to = this.neighbourLane(lane, dir === "left" ? -1 : 1);
+      if (to !== null) this.cursor = { lane: to, index: this.nearestShown(to, index) };
+    } else {
+      const shown = this.shownCards(lane);
+      const to =
+        dir === "top" ? shown[0] : dir === "bottom" ? shown[shown.length - 1] : dir === "down" ? shown.find((i) => i > index) : shown.filter((i) => i < index).pop();
+      if (to !== undefined) this.cursor.index = to;
+    }
+    this.paintCursor();
+  }
+
+  /** Shift+direction: up/down reorders within the lane, left/right moves to the next lane (same row, if it has one). */
+  private moveSelected(dir: Direction) {
+    if (!this.cursor) return this.startCursor();
+    const { lane, index } = this.cursor;
+    if (index < 0) return;
+    const ref = { place: lane, index };
+    const md = cardToMd(this.board!.lanes[lane].cards[index]);
+    let to: Cursor | undefined;
+    if (dir === "left" || dir === "right") {
+      const target = this.neighbourLane(lane, dir === "left" ? -1 : 1);
+      if (target !== null) to = { lane: target, index: Math.min(index, this.board!.lanes[target].cards.length) };
+    } else {
+      const shown = this.shownCards(lane);
+      const next = dir === "down" ? shown.find((i) => i > index) : shown.filter((i) => i < index).pop();
+      if (next !== undefined) to = { lane, index: next };
+    }
+    if (!to) return;
+    this.cursor = to;
+    this.moveCard(ref, md, to.lane, to.index);
+  }
+
+  private deleteSelected() {
+    const cur = this.cursor;
+    if (!cur || cur.index < 0) return;
+    this.deleteCard({ place: cur.lane, index: cur.index }, cardToMd(this.board!.lanes[cur.lane].cards[cur.index]));
+    this.clampCursor();
+  }
+
+  private editSelected(): boolean {
+    const cur = this.cursor;
+    if (!cur || cur.index < 0) return false;
+    const card = this.board!.lanes[cur.lane].cards[cur.index];
+    const wrapper = this.cardEl(cur.lane, cur.index);
+    // Not drawn yet (a redraw is under way): nothing to open the editor in.
+    if (!wrapper || wrapper.dataset.md !== cardToMd(card)) return false;
+    this.editCard(wrapper, card, cardToMd(card));
+    return true;
+  }
+
+  private addToSelectedLane(): boolean {
+    // With nothing selected, add to the default list (without selecting anything).
+    const lane = this.cursor?.lane ?? this.defaultLane();
+    if (lane === -1 || this.searchTerm() || !this.laneShown(lane)) return false;
+    const laneEl = this.laneEl(lane)?.querySelector<HTMLElement>(`:scope > .${c("lane")}`);
+    if (!laneEl) return false;
+    this.openAddForm(laneEl, lane);
+    return true;
+  }
+
+  private laneEl(lane: number): HTMLElement | undefined {
+    return this.contentEl.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")}`)[lane];
+  }
+
+  private cardEl(lane: number, index: number): HTMLElement | undefined {
+    return this.laneEl(lane)?.querySelectorAll<HTMLElement>(`.${c("item-wrapper")}`)[index];
+  }
+
+  /** Outline the card the keyboard is on (or the lane, if it's empty). */
+  private paintCursor(scroll = true) {
+    this.contentEl.querySelectorAll(".tb-selected").forEach((el) => el.removeClass("tb-selected"));
+    this.clampCursor();
+    const cur = this.cursor;
+    if (!cur) return;
+    const el = cur.index >= 0 ? this.cardEl(cur.lane, cur.index) : this.laneEl(cur.lane)?.querySelector<HTMLElement>(`:scope > .${c("lane")}`);
+    el?.addClass("tb-selected");
+    if (scroll) el?.scrollIntoView?.({ block: "nearest", inline: "nearest" });
   }
 
   // ------------------------------------------------------------ menus and pickers

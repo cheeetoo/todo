@@ -148,3 +148,184 @@ test("an unreadable file shows an error and is never rewritten", async () => {
   assert.equal(v.getViewData(), bad);
   assert.equal(v.saves, 0);
 });
+
+// ---- keyboard
+
+const press = (v: any, key: string, init: KeyboardEventInit = {}) => v.onKey(new KeyboardEvent("keydown", { key, ...init }));
+/** A run of plain key presses, one character each. */
+const keys = (v: any, run: string) => [...run].forEach((k) => press(v, k));
+const selected = (v: any) => [...v.contentEl.querySelectorAll(".tb-selected")];
+/** Where the keyboard is, read off the page: the lane, and the card in it (-1 for an empty lane). */
+const at = (v: any) => {
+  const [el] = selected(v);
+  const isCard = el.classList.contains("kanban-plugin__item-wrapper");
+  const lane = el.closest(".kanban-plugin__lane-wrapper") ?? el.parentElement;
+  return { lane: lanesEl(v).indexOf(lane), index: isCard ? cardsIn(lane).indexOf(el) : -1 };
+};
+const titles = (v: any, lane: number) => lanesOf(v)[lane].cards.map((c) => c.title);
+
+test("j/k/h/l move the selection; the first press just lands", async () => {
+  const v = await open();
+  assert.equal(selected(v).length, 0);
+  assert.equal(press(v, "j"), true);
+  assert.deepEqual(at(v), { lane: 2, index: 0 }, "first press lands on Today's first card");
+  keys(v, "jjj");
+  assert.deepEqual(at(v), { lane: 2, index: 3 });
+  keys(v, "hh");
+  assert.deepEqual(at(v), { lane: 0, index: 0 }, "a short lane pulls the row in");
+  keys(v, "ll");
+  assert.deepEqual(at(v), { lane: 2, index: 0 });
+  keys(v, "jjj");
+  press(v, "ArrowUp");
+  assert.equal(at(v).index, 2);
+  keys(v, "kkkkk");
+  assert.equal(at(v).index, 0, "stops at the top");
+  keys(v, "jjjhhh");
+  assert.equal(at(v).lane, 0, "stops at the first lane");
+  keys(v, "ll");
+  press(v, "G");
+  assert.equal(at(v).index, 6);
+  keys(v, "gg");
+  assert.equal(at(v).index, 0);
+  keys(v, "gjg");
+  assert.equal(at(v).index, 1, "a g that isn't followed by g does nothing");
+  assert.equal(selected(v).length, 1);
+});
+
+test("the selection lands in an empty lane; Escape drops it", async () => {
+  const v = await open();
+  keys(v, "jl");
+  assert.deepEqual(at(v), { lane: 3, index: -1 });
+  keys(v, "jk");
+  assert.deepEqual(at(v), { lane: 3, index: -1 }, "nothing to move to");
+  keys(v, "l");
+  assert.equal(at(v).lane, 4);
+  assert.equal(press(v, "Escape"), true);
+  assert.equal(selected(v).length, 0);
+  assert.equal(press(v, "Escape"), false, "Escape is left alone when nothing is selected");
+});
+
+test("Shift+J/K reorders in the lane; Shift+L/H moves to the next lane, and the selection follows", async () => {
+  const v = await open();
+  const today = titles(v, 2);
+  keys(v, "jj");
+  assert.deepEqual(at(v), { lane: 2, index: 1 });
+  press(v, "J");
+  await v.render();
+  assert.deepEqual(titles(v, 2).slice(0, 3), [today[0], today[2], today[1]]);
+  assert.deepEqual(at(v), { lane: 2, index: 2 });
+  press(v, "K", { shiftKey: true });
+  press(v, "ArrowUp", { shiftKey: true });
+  await v.render();
+  assert.deepEqual(titles(v, 2).slice(0, 3), [today[1], today[0], today[2]]);
+  assert.deepEqual(at(v), { lane: 2, index: 0 });
+
+  // Right, into the empty WiP lane, then on into Done (which ticks it).
+  press(v, "L");
+  await v.render();
+  assert.deepEqual(at(v), { lane: 3, index: 0 });
+  assert.equal(titles(v, 3)[0], today[1]);
+  press(v, "L");
+  await v.render();
+  assert.equal(lanesOf(v)[4].cards[0].title, today[1]);
+  assert.equal(lanesOf(v)[4].cards[0].check, "x");
+  assert.deepEqual(at(v), { lane: 4, index: 0 });
+  press(v, "L");
+  assert.equal(v.saves, 5, "the end of the board moves nothing");
+
+  keys(v, "uuuuu");
+  assert.equal(v.getViewData(), fixture);
+});
+
+test("rapid presses see each other even before the board has redrawn", async () => {
+  const v = await open();
+  keys(v, "jj");
+  press(v, "J");
+  press(v, "J");
+  press(v, "J");
+  await v.render();
+  assert.equal(titles(v, 2)[4], titles(await open(), 2)[1], "the card went down three places");
+  assert.deepEqual(at(v), { lane: 2, index: 4 });
+});
+
+test("dd deletes and u undoes; a lone d does nothing", async () => {
+  const v = await open();
+  keys(v, "jj");
+  const before = titles(v, 2);
+  keys(v, "dj");
+  assert.equal(titles(v, 2).length, before.length, "d then another key deletes nothing");
+  keys(v, "kdd");
+  await v.render();
+  assert.deepEqual(titles(v, 2), before.filter((_, i) => i !== 1));
+  assert.deepEqual(at(v), { lane: 2, index: 1 }, "the next card slides under the selection");
+  keys(v, "G");
+  keys(v, "dd");
+  await v.render();
+  assert.deepEqual(at(v), { lane: 2, index: 4 }, "deleting the last card steps back");
+  keys(v, "uu");
+  assert.equal(v.getViewData(), fixture);
+});
+
+test("collapsed lanes and search misses are skipped", async () => {
+  const v = await open();
+  v.toggleCollapse(1);
+  await v.render();
+  keys(v, "jh");
+  assert.equal(at(v).lane, 0, "Week is collapsed");
+  keys(v, "l");
+  assert.equal(at(v).lane, 2);
+
+  v.searchQuery = "tweet";
+  await v.render();
+  keys(v, "h");
+  assert.equal(at(v).lane, 2, "no other lane matches");
+  keys(v, "gg");
+  assert.equal(at(v).index, 2);
+  keys(v, "j");
+  assert.equal(at(v).index, 3, "tweet thread figures");
+  keys(v, "j");
+  assert.equal(at(v).index, 3, "nothing else matches");
+  press(v, "K");
+  assert.ok(titles(v, 2)[2].includes("figures") && titles(v, 2)[3].includes("content"), "swapped with the other match");
+  assert.equal(press(v, "a"), false, "adding is off while searching");
+});
+
+test("Enter and e edit the selected card; a adds to its lane; neither does anything unselected", async () => {
+  const v = await open();
+  const opened: any[] = [];
+  v.editCard = (wrapper: any, card: any) => opened.push([wrapper, card]);
+  const added: any[] = [];
+  v.openAddForm = (_el: any, lane: number) => added.push(lane);
+  assert.equal(press(v, "Enter"), false);
+  assert.equal(press(v, "a"), true, "with nothing selected, a adds to Today");
+  assert.deepEqual(added, [2]);
+  assert.equal(selected(v).length, 0, "and still nothing is highlighted");
+  added.length = 0;
+  keys(v, "jj");
+  assert.equal(press(v, "Enter"), true);
+  assert.equal(press(v, "e"), true);
+  assert.equal(opened.length, 2);
+  assert.equal(opened[0][1].title, titles(v, 2)[1]);
+  assert.equal(opened[0][0], cardsIn(lanesEl(v)[2])[1]);
+  assert.equal(press(v, "a"), true);
+  assert.deepEqual(added, [2]);
+});
+
+test("a click selects the card; keys are ignored with a modifier held, while typing, or on an unreadable board", async () => {
+  const v = await open();
+  cardsIn(lanesEl(v)[2])[4].dispatchEvent(new Event("pointerdown", { bubbles: true }));
+  v.onPointerDownAnywhere({ target: cardsIn(lanesEl(v)[2])[4] });
+  assert.deepEqual(at(v), { lane: 2, index: 4 });
+  keys(v, "j");
+  assert.equal(at(v).index, 5);
+
+  assert.equal(press(v, "j", { ctrlKey: true }), false);
+  assert.equal(press(v, "j", { metaKey: true }), false);
+  const input = document.createElement("input");
+  const typing: any = { key: "j", target: input, ctrlKey: false, metaKey: false, altKey: false, isComposing: false };
+  assert.equal(v.onKey(typing), false);
+  assert.equal(at(v).index, 5);
+
+  const bad = await open("---\n\nkanban-plugin: board\n\n---\n\n## A\n\nstray paragraph\n");
+  assert.equal(press(bad, "j"), false);
+});

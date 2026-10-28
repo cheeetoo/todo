@@ -68,6 +68,19 @@ body.tb-is-dragging * {
   -webkit-touch-callout: none;
 }
 
+/* Keyboard cursor: the same ring obsidian-kanban draws on a hovered card; an empty lane gets it whole. */
+.kanban-plugin__item-wrapper.tb-selected > .kanban-plugin__item {
+  border-color: var(--interactive-accent);
+  box-shadow: var(--shadow-s), 0 0 0 2px hsla(var(--interactive-accent-hsl), 0.7);
+}
+.kanban-plugin__lane.tb-selected {
+  box-shadow: 0 0 0 2px hsla(var(--interactive-accent-hsl), 0.7);
+}
+
+.tb-keys-table td {
+  padding: 4px 12px 4px 0;
+}
+
 /* Autocomplete */
 .tb-suggest-note {
   color: var(--text-faint);
