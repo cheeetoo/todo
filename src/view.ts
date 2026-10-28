@@ -147,7 +147,10 @@ export class BoardView extends TextFileView {
   private openTagColors() {
     if (!this.board) return;
     new TagColorsModal(this.app, this.tagColors(), (colors) =>
-      this.mutate((board) => updateSettings(board, { "tag-colors": colors })),
+      // tag-sort is obsidian-kanban's tag order; keep it in step.
+      this.mutate((board) =>
+        updateSettings(board, { "tag-colors": colors, "tag-sort": colors.map((t) => ({ tag: t.tagKey })) }),
+      ),
     ).open();
   }
 
@@ -431,7 +434,7 @@ export class BoardView extends TextFileView {
 
   private renderCard(items: HTMLElement, card: Card, lane: Lane, renderer: Component, jobs: Promise<unknown>[]) {
     const md = cardToMd(card);
-    const display = cardDisplay(card);
+    const display = cardDisplay(card, this.tagColors());
     const ref = () => this.refOf(wrapper);
 
     const wrapper = createDiv(c("item-wrapper"));

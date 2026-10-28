@@ -31,6 +31,11 @@ test("multi-line cards keep their continuation lines", () => {
   assert.equal(serializeBoard(b), before);
 });
 
+test("tags sort alphabetically, after any with colours (in their order)", () => {
+  assert.deepEqual(cardDisplay(newCard("b #zeta #Alpha #mid")).tags, ["#Alpha", "#mid", "#zeta"]);
+  assert.deepEqual(cardDisplay(newCard("b #zeta #Alpha #mid"), [{ tagKey: "#MID" }, { tagKey: "#zeta" }]).tags, ["#mid", "#zeta", "#Alpha"]);
+});
+
 test("display pulls tags out and wraps times and dates like obsidian-kanban", () => {
   const m = cardDisplay(newCard("send regatta report @@{23:15} - @@{00:00}  #sailing"));
   assert.deepEqual(m.tags, ["#sailing"]);

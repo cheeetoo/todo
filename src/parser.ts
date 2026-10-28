@@ -207,8 +207,11 @@ export function normTime(t: string): string | null {
   return m[1].padStart(2, "0") + ":" + m[2];
 }
 
-/** Mirrors obsidian-kanban's preprocessTitle with move-tags on and move-dates off. */
-export function cardDisplay(card: Card): CardDisplay {
+/**
+ * Mirrors obsidian-kanban's preprocessTitle with move-tags on and move-dates off.
+ * Tags come in the order of the board's tag colours, then alphabetically.
+ */
+export function cardDisplay(card: Card, tagColors: TagColor[] = []): CardDisplay {
   let md = cardText(card);
   const tags: string[] = [];
   const times: string[] = [];
@@ -231,7 +234,11 @@ export function cardDisplay(card: Card): CardDisplay {
     return `${pre}<span class="${KB}preview-time-wrapper ${KB}date"><span class="${KB}preview-time ${KB}item-metadata-time">${time}</span></span>`;
   });
 
-  tags.sort((a, b) => a.localeCompare(b));
+  const rank = (tag: string) => {
+    const i = tagColors.findIndex((t) => t.tagKey.toLowerCase() === tag.toLowerCase());
+    return i === -1 ? tagColors.length : i;
+  };
+  tags.sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
   return { markdown: md, tags, times, dates };
 }
 

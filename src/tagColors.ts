@@ -1,5 +1,6 @@
 // Edit the board's tag colours, kept where obsidian-kanban keeps them (the
-// board's settings block) as rgba() strings.
+// board's settings block) as rgba() strings. Their order is also the order
+// tags show in on a card.
 
 import { Modal, Setting, type App } from "obsidian";
 import type { TagColor } from "./parser";
@@ -36,6 +37,11 @@ export class TagColorsModal extends Modal {
 
   private draw() {
     this.contentEl.empty();
+    const move = (i: number, to: number) => {
+      this.colors.splice(to, 0, ...this.colors.splice(i, 1));
+      this.changed = true;
+      this.draw();
+    };
     this.colors.forEach((tc, i) => {
       const row = new Setting(this.contentEl);
       const pill = row.nameEl.createEl("a", { cls: "tag kanban-plugin__item-tag" });
@@ -59,6 +65,12 @@ export class TagColorsModal extends Modal {
         row.addColorPicker((p) =>
           p.setValueRgb(toRgb(tc[key])).onChange(() => edit(() => (tc[key] = toRgba(p.getValueRgb())))),
         );
+      // Both arrows on every row, the end ones hidden, so the rows line up.
+      for (const [icon, to] of [["lucide-arrow-up", i - 1], ["lucide-arrow-down", i + 1]] as const)
+        row.addExtraButton((b) => {
+          b.setIcon(icon).onClick(() => move(i, to));
+          b.extraSettingsEl.toggleVisibility(to >= 0 && to < this.colors.length);
+        });
       row.addExtraButton((b) =>
         b
           .setIcon("lucide-trash-2")
@@ -70,7 +82,7 @@ export class TagColorsModal extends Modal {
           }),
       );
     });
-    new Setting(this.contentEl).setDesc("Text colour, then background.").addButton((b) =>
+    new Setting(this.contentEl).addButton((b) =>
       b.setButtonText("Add a tag").onClick(() => {
         this.colors.push({ tagKey: "#", color: "rgba(0, 0, 0, 1)", backgroundColor: "rgba(200, 200, 200, 1)" });
         this.draw();
