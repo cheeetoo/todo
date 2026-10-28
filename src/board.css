@@ -21,8 +21,8 @@
   padding: 4px calc(var(--input-radius) / 4);
 }
 
-/* Collapsed lanes keep their cards in the DOM (so search can fold lanes
-   without a redraw); obsidian-kanban doesn't render them at all. */
+/* Collapsed lanes keep their cards in the DOM; obsidian-kanban doesn't
+   render them at all. */
 .kanban-plugin__lane-wrapper.collapse-horizontal .kanban-plugin__lane-items,
 .kanban-plugin__lane-wrapper.collapse-horizontal .kanban-plugin__item-button-wrapper,
 .kanban-plugin__lane-wrapper.collapse-horizontal .kanban-plugin__item-form,
@@ -30,13 +30,15 @@
   display: none;
 }
 
-/* Search */
+/* Search: only the cards change. A lane with no matches looks like an empty one. */
 .kanban-plugin__item-wrapper.tb-search-hidden {
   display: none;
 }
-.kanban-plugin.tb-searching .kanban-plugin__item-button-wrapper,
-.kanban-plugin.tb-searching .kanban-plugin__item-form {
-  display: none;
+.kanban-plugin__lane-items:not(:has(> .kanban-plugin__item-wrapper:not(.tb-search-hidden))) > .kanban-plugin__placeholder {
+  height: 2.55em;
+  border: 3px dashed rgba(var(--text-muted-rgb), 0.1);
+  margin-block-end: 4px;
+  border-radius: 6px;
 }
 
 /* Drag and drop: the source hides, a same-sized gap opens where it will land. */

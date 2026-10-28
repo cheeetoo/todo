@@ -121,15 +121,28 @@ test("the card menu offers obsidian-kanban's actions", async () => {
   assert.equal(lanesOf(v)[3].cards[0].title, "de-pangram #work");
 });
 
-test("search hides other cards and folds empty lanes, without a redraw", async () => {
+test("search hides other cards, without a redraw; lanes with no matches stay, empty", async () => {
   const v = await open();
   v.searchQuery = "tweet";
   await v.render();
   const visible = (laneEl: any) => cardsIn(laneEl).filter((c: any) => !c.classList.contains("tb-search-hidden")).length;
   const lanes = lanesEl(v);
   assert.equal(visible(lanes[2]), 2);
-  assert.ok(lanes[0].classList.contains("collapse-horizontal"));
-  assert.ok(!lanes[2].classList.contains("collapse-horizontal"));
+  assert.equal(visible(lanes[0]), 0);
+  assert.ok(lanes.every((l: any) => !l.classList.contains("collapse-horizontal")));
+});
+
+test("adding a card while filtering by a tag gives it the tag", async () => {
+  const v = await open();
+  v.searchQuery = "#work";
+  await v.render();
+  // The real editor needs Obsidian; take the Enter handler the add form hands it.
+  let enter: (text: string) => void = () => {};
+  v.openEditor = (_el: any, _parent: any, opts: any) => ((enter = opts.onEnter), { setValue() {} });
+  lanesEl(v)[3].querySelector(".kanban-plugin__new-item-button").click();
+  enter("write the abstract");
+  enter("review #Work notes");
+  assert.deepEqual(lanesOf(v)[3].cards.map((c) => c.title), ["write the abstract #work", "review #Work notes"]);
 });
 
 test("ticking a sub-task inside a card", async () => {
@@ -266,7 +279,7 @@ test("dd deletes and u undoes; a lone d does nothing", async () => {
   assert.equal(v.getViewData(), fixture);
 });
 
-test("collapsed lanes and search misses are skipped", async () => {
+test("collapsed lanes and search misses are skipped; lanes with no matches are empty stops", async () => {
   const v = await open();
   v.toggleCollapse(1);
   await v.render();
@@ -278,7 +291,9 @@ test("collapsed lanes and search misses are skipped", async () => {
   v.searchQuery = "tweet";
   await v.render();
   keys(v, "h");
-  assert.equal(at(v).lane, 2, "no other lane matches");
+  assert.deepEqual(at(v), { lane: 0, index: -1 }, "Later has no matches, so it's empty");
+  keys(v, "jl");
+  assert.equal(at(v).lane, 2);
   keys(v, "gg");
   assert.equal(at(v).index, 2);
   keys(v, "j");
@@ -287,7 +302,8 @@ test("collapsed lanes and search misses are skipped", async () => {
   assert.equal(at(v).index, 3, "nothing else matches");
   press(v, "K");
   assert.ok(titles(v, 2)[2].includes("figures") && titles(v, 2)[3].includes("content"), "swapped with the other match");
-  assert.equal(press(v, "a"), false, "adding is off while searching");
+  v.openAddForm = () => {};
+  assert.equal(press(v, "a"), true, "adding works while searching");
 });
 
 test("Enter and e edit the selected card; a adds to its lane; neither does anything unselected", async () => {

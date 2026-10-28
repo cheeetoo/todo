@@ -427,7 +427,6 @@ export class BoardView extends TextFileView {
   private renderLane(parent: HTMLElement, lane: Lane, laneIndex: number, collapsed: boolean, renderer: Component, jobs: Promise<unknown>[]) {
     const wrapper = parent.createDiv(c("lane-wrapper"));
     wrapper.toggleClass("collapse-horizontal", collapsed);
-    wrapper.dataset.collapsed = String(collapsed);
     const laneEl = wrapper.createDiv({ cls: c("lane"), attr: { "data-count": String(lane.cards.length) } });
 
     const header = laneEl.createDiv(c("lane-header-wrapper"));
@@ -669,10 +668,14 @@ export class BoardView extends TextFileView {
     button.hide();
 
     const add = (text: string) => {
-      if (!text.trim()) return;
+      text = text.trim();
+      if (!text) return;
+      // Filtering by a tag: the new card gets it, so it doesn't vanish.
+      const tag = this.filterTag();
+      if (tag && !text.toLowerCase().includes(tag.toLowerCase())) text += ` ${tag}`;
       this.mutate((board) => {
         const lane = board.lanes[laneIndex];
-        lane.cards.push(newCard(text.trim(), lane.complete));
+        lane.cards.push(newCard(text, lane.complete));
       }, false);
       // Draw just the new card, keeping the form (and a phone's keyboard) where they are.
       const lane = this.board!.lanes[laneIndex];
@@ -778,21 +781,13 @@ export class BoardView extends TextFileView {
     cancel.onclick = close;
   }
 
-  /** Filter in place (no redraw, so typing isn't interrupted); lanes with no matches fold away. */
+  /** Filter in place (no redraw, so typing isn't interrupted); lanes with no matches stay, empty. */
   private applySearch() {
     const q = (this.searchQuery ?? "").trim().toLowerCase();
     const root = this.rootEl();
     if (!root) return;
-    root.toggleClass("tb-searching", !!q);
-    for (const laneWrapper of Array.from(root.querySelectorAll<HTMLElement>(`.${c("lane-wrapper")}`))) {
-      let any = false;
-      for (const w of Array.from(laneWrapper.querySelectorAll<HTMLElement>(`.${c("item-wrapper")}`))) {
-        const hit = !q || (w.dataset.md ?? "").toLowerCase().includes(q);
-        w.toggleClass("tb-search-hidden", !hit);
-        any ||= hit;
-      }
-      laneWrapper.toggleClass("collapse-horizontal", laneWrapper.dataset.collapsed === "true" || (!!q && !any));
-    }
+    for (const w of Array.from(root.querySelectorAll<HTMLElement>(`.${c("item-wrapper")}`)))
+      w.toggleClass("tb-search-hidden", !!q && !(w.dataset.md ?? "").toLowerCase().includes(q));
   }
 
   // ------------------------------------------------------------ keyboard
@@ -850,11 +845,15 @@ export class BoardView extends TextFileView {
     return (this.searchQuery ?? "").trim().toLowerCase();
   }
 
-  /** Whether a lane is on screen: not collapsed, and (while searching) holding a match. */
+  /** The tag being filtered by, when the search is just a tag (as clicking one makes it). */
+  private filterTag(): string | null {
+    const q = (this.searchQuery ?? "").trim();
+    return /^#[^\s#]+$/.test(q) ? q : null;
+  }
+
+  /** Whether a lane is on screen (not collapsed). */
   private laneShown(lane: number): boolean {
-    const board = this.board!;
-    if (this.collapsed(board)[lane]) return false;
-    return !this.searchTerm() || this.shownCards(lane).length > 0;
+    return !this.collapsed(this.board!)[lane];
   }
 
   /** The positions of a lane's cards that are on screen (search hides the rest). */
@@ -880,7 +879,7 @@ export class BoardView extends TextFileView {
     return best;
   }
 
-  /** Keep the cursor on a card (or an empty lane) that exists. */
+  /** Keep the cursor on a card (or an empty lane, or one search has emptied) that exists. */
   private clampCursor() {
     const cur = this.cursor;
     if (!cur) return;
@@ -891,14 +890,18 @@ export class BoardView extends TextFileView {
     }
     cur.lane = Math.min(cur.lane, lanes.length - 1);
     const count = lanes[cur.lane].cards.length;
-    cur.index = count ? Math.max(0, Math.min(cur.index, count - 1)) : -1;
+    cur.index = count && this.shownCards(cur.lane).length ? Math.max(0, Math.min(cur.index, count - 1)) : -1;
   }
 
-  /** Where the keys act before any card is selected: the Today list, else the first one on screen. */
+  /**
+   * Where the keys act before any card is selected: the Today list, else the
+   * first one on screen. While searching, only lists with a match count.
+   */
   private defaultLane(): number {
     const lanes = this.board?.lanes ?? [];
-    const today = lanes.findIndex((lane, i) => lane.title.trim().toLowerCase() === DEFAULT_LANE && this.laneShown(i));
-    return today !== -1 ? today : lanes.findIndex((_, i) => this.laneShown(i));
+    const ok = (i: number) => this.laneShown(i) && (!this.searchTerm() || this.shownCards(i).length > 0);
+    const today = lanes.findIndex((lane, i) => lane.title.trim().toLowerCase() === DEFAULT_LANE && ok(i));
+    return today !== -1 ? today : lanes.findIndex((_, i) => ok(i));
   }
 
   /** The first press of any movement key just lands on the default list's first card. */
@@ -966,7 +969,7 @@ export class BoardView extends TextFileView {
   private addToSelectedLane(): boolean {
     // With nothing selected, add to the default list (without selecting anything).
     const lane = this.cursor?.lane ?? this.defaultLane();
-    if (lane === -1 || this.searchTerm() || !this.laneShown(lane)) return false;
+    if (lane === -1 || !this.laneShown(lane)) return false;
     const laneEl = this.laneEl(lane)?.querySelector<HTMLElement>(`:scope > .${c("lane")}`);
     if (!laneEl) return false;
     this.openAddForm(laneEl, lane);
